@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"html/template"
@@ -21,17 +22,36 @@ type Tweet struct {
 	Tweet string `db:"tweet"`
 }
 
+type Tweetlist []Tweet
+
 func init() {
 	log.SetPrefix("[Info]")
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
+	var tweetlist Tweetlist
+	db, err := sqlx.Open(driverName, dataSourceName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var Tweet Tweet
+	rows, err := db.Queryx("SELECT * FROM tweets")
+	for rows.Next() {
+		err := rows.StructScan(&Tweet)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("DB=", Tweet.ID)
+		fmt.Println("DB=", Tweet.Tweet)
+		tweetlist = append(tweetlist, Tweet)
+	}
 	t, err := template.ParseFiles("views/index.html")
 	if err != nil {
 		log.Fatalln(err)
 	}
-	t.Execute(w, nil)
+	fmt.Println("HTML返却=", Tweet)
+	t.Execute(w, tweetlist)
 
 }
 

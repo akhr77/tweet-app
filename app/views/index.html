@@ -11,7 +11,13 @@
     <main>
         <header>Gopher Tweets</header>
         <div class="tweet_view">
-
+            {{range .}}
+            <form action="/tweet_delete" method="DELETE">
+                <p class="tweet_message">{{.Tweet}}
+                    <button type="submit" value={{.ID}} name="tweet_delete" class="tweet_delete_button">-</button>
+                </p>
+            </form>
+            {{end}}
         </div>
         <form action="/tweet/" method="POST" class="tweet_form">
             <textarea name="tweet" cols="20" rows="80"></textarea>
