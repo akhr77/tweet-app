@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"html/template"
@@ -31,26 +30,26 @@ func init() {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	var tweetlist Tweetlist
+
 	db, err := sqlx.Open(driverName, dataSourceName)
 	if err != nil {
 		log.Fatal(err)
 	}
-	var Tweet Tweet
+
+	var tweet Tweet
 	rows, err := db.Queryx("SELECT * FROM tweets")
 	for rows.Next() {
-		err := rows.StructScan(&Tweet)
+		err := rows.StructScan(&tweet)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println("DB=", Tweet.ID)
-		fmt.Println("DB=", Tweet.Tweet)
-		tweetlist = append(tweetlist, Tweet)
+		tweetlist = append(tweetlist, tweet)
 	}
+
 	t, err := template.ParseFiles("views/index.html")
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("HTML返却=", Tweet)
 	t.Execute(w, tweetlist)
 
 }
@@ -62,8 +61,22 @@ func createPostTweet(w http.ResponseWriter, r *http.Request) {
 	}
 	v := r.FormValue("tweet")
 	_, err = db.NamedExec(`INSERT INTO tweets (tweet) VALUES (:tweet)`, map[string]interface{}{
-		"id":    1,
 		"tweet": v,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func deleteTweet(w http.ResponseWriter, r *http.Request) {
+	db, err := sqlx.Open(driverName, dataSourceName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	v := r.FormValue("tweet_delete")
+	_, err = db.NamedExec(`DELETE FROM tweets WHERE id = :id`, map[string]interface{}{
+		"id": v,
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -75,5 +88,6 @@ func main() {
 	http.Handle("/resources/", http.StripPrefix("/resources", http.FileServer(http.Dir("resources/"))))
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/tweet/", createPostTweet)
+	http.HandleFunc("/tweet_delete", deleteTweet)
 	http.ListenAndServe(":8082", nil)
 }
