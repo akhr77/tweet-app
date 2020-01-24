@@ -3,7 +3,7 @@ services:
     go:
         build:
             context: ./docker/go
-        container_name: tweet-go
+        container_name: favpic
         volumes:
             - .:/go/src
         ports:
@@ -16,7 +16,7 @@ services:
 
     mysql:
         image: mysql:8.0
-        container_name: tweet-db
+        container_name: favpicDB
         volumes:
           - db-store:/var/lib/mysql
           - ./logs:/var/log/mysql

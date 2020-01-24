@@ -7,4 +7,3 @@ RUN apk update && \
     go get github.com/pilu/fresh
 # イメージからコンテナを作成する際に実行
 CMD ["fresh"]
-

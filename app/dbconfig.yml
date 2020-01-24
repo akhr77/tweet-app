@@ -1,0 +1,4 @@
+development:
+    dialect: mysql
+    dir: db/migrations
+    datasource: favpic:favpic@tcp(127.0.0.1)/favpic?charset=utf8mb4&collation=utf8mb4_general_ci&parseTime=true

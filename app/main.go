@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	driverName     = "mysql"
-	dataSourceName = "tweet-db:tweet-db@tcp(tweet-db:3306)/tweet-db"
+	driverName = "mysql"
+	dsn        = "favpic:favpic@tcp(favpicDB:3306)/favpic"
 )
 
 type Tweet struct {
@@ -31,13 +31,16 @@ func init() {
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	var tweetlist Tweetlist
 
-	db, err := sqlx.Open(driverName, dataSourceName)
+	db, err := sqlx.Open(driverName, dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var tweet Tweet
 	rows, err := db.Queryx("SELECT * FROM tweets")
+	if err != nil {
+		log.Fatal(err)
+	}
 	for rows.Next() {
 		err := rows.StructScan(&tweet)
 		if err != nil {
@@ -55,7 +58,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func createPostTweet(w http.ResponseWriter, r *http.Request) {
-	db, err := sqlx.Open(driverName, dataSourceName)
+	db, err := sqlx.Open(driverName, dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,7 +73,7 @@ func createPostTweet(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteTweet(w http.ResponseWriter, r *http.Request) {
-	db, err := sqlx.Open(driverName, dataSourceName)
+	db, err := sqlx.Open(driverName, dsn)
 	if err != nil {
 		log.Fatal(err)
 	}
