@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users(
 
 CREATE TABLE IF NOT EXISTS relationships(
     id MEDIUMINT NOT NULL AUTO_INCREMENT,
-    user_id INT(10),
+    user_id INT(10) NOT NULL,
     folloer_id INT(10),
     followed_id INT(10),
     created_at timestamp,
@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS relationships(
 
 CREATE TABLE IF NOT EXISTS posts(
     id MEDIUMINT NOT NULL AUTO_INCREMENT,
-    user_id INT(10),
-    image VARCHAR(100),
+    user_id INT(10) NOT NULL,
+    image VARCHAR(100) NOT NULL,
     comment VARCHAR(120),
     created_at timestamp,
     updated_at timestamp,
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS posts(
 
 CREATE TABLE IF NOT EXISTS likes(
     id MEDIUMINT NOT NULL AUTO_INCREMENT,
-    user_id INT(10),
-    post_id INT(10),
+    user_id INT(10) NOT NULL,
+    post_id INT(10) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -47,4 +47,3 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS relationships;
 DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS likes;
-
