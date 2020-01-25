@@ -1,9 +1,20 @@
 version: '3'
 services:
+    vue:
+        build:
+            context: ./docker/vue
+        container_name: favpic-vue
+        ports:
+            - 8080:8080
+        volumes:
+            - .:/app
+        working_dir: /app
+        tty: true
+        command: sh -c "cd assets && yarn install && yarn serve"
     go:
         build:
             context: ./docker/go
-        container_name: favpic
+        container_name: favpic-go
         volumes:
             - .:/go/src
         ports:
@@ -13,6 +24,18 @@ services:
         command: fresh
         depends_on:
             - mysql
+
+    nginx:
+        image: nginx
+        depends_on:
+            - go
+        container_name: favpic-nginx
+        ports:
+            - 80:80
+        environment:
+            - TZ=Asia/Tokyo
+        volumes:
+            - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf
 
     mysql:
         image: mysql:8.0

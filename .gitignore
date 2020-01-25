@@ -1,3 +1,4 @@
 .env
 logs
 app/tmp
+assets/node_modules
