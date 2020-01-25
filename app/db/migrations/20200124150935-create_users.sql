@@ -1,9 +1,50 @@
 
 -- +migrate Up
-CREATE TABLE IF NOT EXISTS tweets(
+CREATE TABLE IF NOT EXISTS users(
     id MEDIUMINT NOT NULL AUTO_INCREMENT,
-    tweet CHAR(30),
+    username VARCHAR(60) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    encryped_password VARCHAR(100),
+    avater CHAR(100),
+    reset_password_token VARCHAR(100),
+    confirmation_token VARCHAR(100),
+    guest_flag CHAR(1),
+    admin_flag CHAR(1),
+    created_at timestamp,
+    updated_at timestamp,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS relationships(
+    id MEDIUMINT NOT NULL AUTO_INCREMENT,
+    user_id INT(10),
+    folloer_id INT(10),
+    followed_id INT(10),
+    created_at timestamp,
+    updated_at timestamp,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS posts(
+    id MEDIUMINT NOT NULL AUTO_INCREMENT,
+    user_id INT(10),
+    image VARCHAR(100),
+    comment VARCHAR(120),
+    created_at timestamp,
+    updated_at timestamp,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS likes(
+    id MEDIUMINT NOT NULL AUTO_INCREMENT,
+    user_id INT(10),
+    post_id INT(10),
+    PRIMARY KEY (id)
+);
+
 -- +migrate Down
-DROP TABLE IF EXISTS tweets;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS relationships;
+DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS likes;
+
