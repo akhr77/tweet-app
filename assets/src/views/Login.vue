@@ -1,5 +1,5 @@
 <template>
-  <div id="home">
+  <div id="login">
     <el-container>
       <el-header>
         <div>
@@ -13,8 +13,8 @@
             <b>FavPic</b>
           </a>
           <el-row>
-            <el-button round class="nav-login">
-              <router-link to="/login">ログイン</router-link>
+            <el-button round>
+              <a href="https://element.eleme.io">ログイン</a>
             </el-button>
           </el-row>
         </div>
@@ -28,20 +28,11 @@
               />
               <div style="padding: 14px;">
                 <span>Yummy hamburger</span>
+                <div class="bottom clearfix">
+                  <time class="time">{{ currentDate }}</time>
+                  <el-button type="text" class="button">Operating</el-button>
+                </div>
               </div>
-              <el-row class="avatar">
-                <el-col :span="12">
-                  <div class="sub-title">@みねこ</div>
-                  <div class="avater-circle">
-                    <div class="block">
-                      <el-avatar :size="70" :src="circleUrl"></el-avatar>
-                    </div>
-                    <div class="block" v-for="size in sizeList" :key="size">
-                      <el-avatar :size="size" :src="circleUrl"></el-avatar>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
             </el-card>
           </el-col>
         </el-row>
@@ -54,8 +45,7 @@
 export default {
   data() {
     return {
-      circleUrl:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+      currentDate: new Date()
     };
   }
 };
@@ -90,17 +80,5 @@ export default {
 
 .clearfix:after {
   clear: both;
-}
-
-.home {
-  font-size: 3em;
-  text-decoration: none;
-  float: left;
-}
-
-.nav-login {
-  font-size: 1.2em;
-  float: right;
-  margin-top: 10px;
 }
 </style>

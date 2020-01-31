@@ -11,6 +11,7 @@ services:
         working_dir: /app
         tty: true
         command: sh -c "cd assets && yarn install && yarn serve"
+
     go:
         build:
             context: ./docker/go

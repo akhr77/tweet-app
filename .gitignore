@@ -2,3 +2,4 @@
 logs
 app/tmp
 assets/node_modules
+assets/src/cognito
