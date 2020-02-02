@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <div>
-          <span>お試しで機能をご利用したい場合は、</span>
+          <span>お試し機能をご利用したい場合は、</span>
           <el-link href="https://element.eleme.io" target="_blank">こちらからゲストユーザーでログインしてください。</el-link>
         </div>
       </el-header>
@@ -55,8 +55,18 @@ export default {
   data() {
     return {
       circleUrl:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+      imageUrl: "",
+      avaterUrl: ""
     };
+  },
+  mounted() {
+    this.$axios
+      .get("http://localhost/api/")
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => console.log(error));
   }
 };
 </script>

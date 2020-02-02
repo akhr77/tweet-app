@@ -1,84 +1,43 @@
 <template>
-  <div id="login">
-    <el-container>
-      <el-header>
-        <div>
-          <span>お試しで機能をご利用したい場合は、</span>
-          <el-link href="https://element.eleme.io" target="_blank">こちらからゲストユーザーでログインしてください。</el-link>
-        </div>
-      </el-header>
-      <el-main>
-        <div class="nav-menu">
-          <a class="home" font-weight-bold href="/">
-            <b>FavPic</b>
-          </a>
-          <el-row>
-            <el-button round>
-              <a href="https://element.eleme.io">ログイン</a>
-            </el-button>
-          </el-row>
-        </div>
-        <!-- 写真イメージをCardで表示 -->
-        <el-row>
-          <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 3 : 0">
-            <el-card :body-style="{ padding: '0px' }" shadow="hover">
-              <img
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                class="image"
-              />
-              <div style="padding: 14px;">
-                <span>Yummy hamburger</span>
-                <div class="bottom clearfix">
-                  <time class="time">{{ currentDate }}</time>
-                  <el-button type="text" class="button">Operating</el-button>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
-      </el-main>
-    </el-container>
+  <div class="login">
+    <h2>ログイン</h2>
+    <form @submit.prevent="login">
+      <div>
+        ユーザー名:
+        <input type="text" placeholder="username" v-model="username" required />
+      </div>
+      <div>
+        パスワード:
+        <input type="password" placeholder="password" v-model="password" required />
+      </div>
+      <button>ログイン</button>
+    </form>
+    <router-link to="/confirm">確認コード入力</router-link>
+    <router-link to="/singup">ユーザー登録</router-link>
   </div>
 </template>
 
 <script>
 export default {
+  name: "Login",
   data() {
     return {
-      currentDate: new Date()
+      username: "",
+      password: ""
     };
+  },
+  methods: {
+    login() {
+      this.$cognito
+        .login(this.username, this.password)
+        .then(result => {
+          this.$router.replace("/");
+          console.log(result);
+        })
+        .then(err => {
+          this.error = err;
+        });
+    }
   }
 };
 </script>
-
-<style scoped>
-.time {
-  font-size: 13px;
-  color: #999;
-}
-
-.bottom {
-  margin-top: 13px;
-  line-height: 12px;
-}
-
-.button {
-  padding: 0;
-  float: right;
-}
-
-.image {
-  width: 100%;
-  display: block;
-}
-
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-
-.clearfix:after {
-  clear: both;
-}
-</style>
