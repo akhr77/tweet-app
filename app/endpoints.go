@@ -15,12 +15,13 @@ type api struct {
 	db *sqlx.DB
 }
 
-type user struct {
+type userPost struct {
 	ID               int            `db:"id"`
 	UserName         string         `db:"username"`
 	Email            string         `db:"email"`
 	EncrypedPassword sql.NullString `db:"encryped_password"`
 	Avater           string         `db:"avater"`
+	Image            string         `db:"image"`
 }
 
 // type user struct {
@@ -37,24 +38,24 @@ type user struct {
 // 	UpdatedAt          time.Time      `db:"updated_at"`
 // }
 
-type users []user
+type userPosts []userPost
 
 func (a *api) IndexHandler(w http.ResponseWriter, r *http.Request) {
-	var users users
-	var user user
+	var userPosts userPosts
+	var userPost userPost
 
-	rows, err := a.db.Queryx("SELECT id,username,email,encryped_password,avater FROM users")
+	rows, err := a.db.Queryx("SELECT u.id,u.username,u.email,u.encryped_password,u.avater,p.image FROM users u INNER JOIN posts p ON u.id = p.user_id ")
 	if err != nil {
 		log.Fatal(err)
 	}
 	for rows.Next() {
-		err := rows.StructScan(&user)
+		err := rows.StructScan(&userPost)
 		if err != nil {
 			log.Fatal(err)
 		}
-		users = append(users, user)
+		userPosts = append(userPosts, userPost)
 	}
-	json.NewEncoder(w).Encode(users)
+	json.NewEncoder(w).Encode(userPosts)
 }
 
 func CreatePostTweet(w http.ResponseWriter, r *http.Request) {

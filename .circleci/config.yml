@@ -8,15 +8,6 @@ jobs:
       # specify the version
       - image: circleci/golang:1.9
 
-      - image: circleci/mysql:8.0
-        environment:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_ROOT_PASSWORD: ""
-          MYSQL_DATABASE: favpic_test
-          MYSQL_HOST: 127.0.0.1
-          MYSQL_ROOT_HOST: "%"
-          MYSQL_USER: root
-
     working_directory: /go/src/github.com/akhr77/favpic/app
     steps:
       - checkout
