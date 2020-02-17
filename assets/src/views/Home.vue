@@ -36,9 +36,6 @@
                     <div class="block">
                       <el-avatar :size="70" :src="info[0].Avater"></el-avatar>
                     </div>
-                    <div class="block" v-for="size in sizeList" :key="size">
-                      <el-avatar :size="size" :src="circleUrl"></el-avatar>
-                    </div>
                   </div>
                 </el-col>
               </el-row>
