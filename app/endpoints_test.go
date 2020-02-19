@@ -39,10 +39,10 @@ func TestIndexHandler(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	// now := time.Now()
-	rows := sqlmock.NewRows([]string{"id", "username", "email", "encryped_password", "avater"}).
-	AddRow(1, "test1", "abc@gmail.com", sql.NullString{"test.password", true}, "testavatar").
-	AddRow(2, "test2", "abc@gmail.com", sql.NullString{"test.password", true}, "testavatar")
-	mock.ExpectQuery(regexp.QuoteMeta(`SELECT id,username,email,encryped_password,avater FROM users`)).WillReturnRows(rows)
+	rows := sqlmock.NewRows([]string{"id", "username", "email", "avater"}).
+	AddRow(1, "test1", "abc@gmail.com", "testavatar").
+	AddRow(2, "test2", "abc@gmail.com", "testavatar")
+	mock.ExpectQuery(regexp.QuoteMeta(`SELECT id,username,email,avater FROM users`)).WillReturnRows(rows)
 	app.IndexHandler(w, req)
 
 	if w.Code != 200 {
@@ -50,8 +50,8 @@ func TestIndexHandler(t *testing.T) {
 	}
 
 	data := users{
-		{ID: 1, UserName: "test1", Email: "abc@gmail.com", EncrypedPassword: sql.NullString{"test.password", true}, Avater: "testavatar"},
-		{ID: 2, UserName: "test2", Email: "abc@gmail.com", EncrypedPassword: sql.NullString{"test.password", true}, Avater: "testavatar"},
+		{ID: 1, UserName: "test1", Email: "abc@gmail.com", Avater: "testavatar"},
+		{ID: 2, UserName: "test2", Email: "abc@gmail.com", Avater: "testavatar"},
 	}
 
 	app.assertJSON(w.Body.Bytes(), data, t)
