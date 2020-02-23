@@ -47,14 +47,9 @@ export default {
     };
   },
   mounted() {
-    this.$axios
-      .get("http://localhost/api/")
-      .then(response => {
-        this.info = response.data;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    this.$axios.get("http://localhost/api/").then(response => {
+      this.info = response.data;
+    });
   }
 };
 </script>

@@ -40,8 +40,8 @@ func TestIndexHandler(t *testing.T) {
 
 	// now := time.Now()
 	rows := sqlmock.NewRows([]string{"id", "username", "email", "avater"}).
-	AddRow(1, "test1", "abc@gmail.com", "testavatar").
-	AddRow(2, "test2", "abc@gmail.com", "testavatar")
+		AddRow(1, "test1", "abc@gmail.com", "testavatar").
+		AddRow(2, "test2", "abc@gmail.com", "testavatar")
 	mock.ExpectQuery(regexp.QuoteMeta(`SELECT id,username,email,avater FROM users`)).WillReturnRows(rows)
 	app.IndexHandler(w, req)
 

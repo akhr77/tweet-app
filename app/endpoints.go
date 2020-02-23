@@ -42,6 +42,35 @@ func (a *api) IndexHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(userPosts)
 }
 
+func (a *api) UploadS3(w http.ResponseWriter, r *http.Request) {
+	// sess := session.Must(session.NewSession(&aws.Config{
+	// 	Region:      aws.String("ap-northeast-1"),
+	// 	Credentials: credentials.NewSharedCredentials("", "defult"),
+	// }))
+
+	// uploader := s3manager.NewUploader(sess)
+
+	// result, err := uploader.Upload(&s3manager.UploadInput{
+	// 	Bucket: aws.String("amplify-favpic-favpic-145648-deployment"),
+	// 	Key:    aws.String("favpic"),
+	// 	Body:   data,
+	// })
+
+	// //結果表示
+	// if err == nil {
+	// 	fmt.Println(result.Location)
+	// } else {
+	// 	fmt.Println("error happend!!!")
+	// }
+	r.ParseForm()
+	message := r.Form.Get("message")
+	image := r.Form.Get("image")
+	log.Println(message)
+	log.Println(image)
+
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
 func CreatePostTweet(w http.ResponseWriter, r *http.Request) {
 	db, err := sqlx.Open(driverName, dsn)
 	if err != nil {
