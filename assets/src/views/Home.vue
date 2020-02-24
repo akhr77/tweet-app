@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <div>
-          <span>お試しで機能をご利用したい場合は、</span>
+          <span>お試し機能をご利用したい場合は、</span>
           <el-link href="https://element.eleme.io" target="_blank">こちらからゲストユーザーでログインしてください。</el-link>
         </div>
       </el-header>
@@ -27,17 +27,14 @@
                 class="image"
               />
               <div style="padding: 14px;">
-                <span>Yummy hamburger</span>
+                <span>{{ info[0].Email }}</span>
               </div>
               <el-row class="avatar">
                 <el-col :span="12">
-                  <div class="sub-title">@みねこ</div>
+                  <div class="sub-title">{{ info[0].UserName }}</div>
                   <div class="avater-circle">
                     <div class="block">
-                      <el-avatar :size="70" :src="circleUrl"></el-avatar>
-                    </div>
-                    <div class="block" v-for="size in sizeList" :key="size">
-                      <el-avatar :size="size" :src="circleUrl"></el-avatar>
+                      <el-avatar :size="70" :src="info[0].Avater"></el-avatar>
                     </div>
                   </div>
                 </el-col>
@@ -54,9 +51,23 @@
 export default {
   data() {
     return {
-      circleUrl:
-        "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+      info: {
+        ID: "",
+        UserName: "",
+        Email: "",
+        EncrypedPassword: "",
+        Avater: "",
+        Image: ""
+      }
     };
+  },
+  mounted() {
+    this.$axios
+      .get("http://localhost/api/")
+      .then(response => {
+        this.info = response.data;
+      })
+      .catch(error => console.log(error));
   }
 };
 </script>

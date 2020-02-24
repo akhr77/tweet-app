@@ -1,4 +1,4 @@
-FROM node:8.16-alpine
+FROM node:10.19.0-alpine
 
 RUN apk update && \
     npm install -g npm && \

@@ -1,0 +1,20 @@
+{
+    "favpic": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-favpic-favpic-145648-authRole",
+            "UnauthRoleArn": "arn:aws:iam::633566444129:role/amplify-favpic-favpic-145648-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::633566444129:role/amplify-favpic-favpic-145648-authRole",
+            "Region": "ap-northeast-1",
+            "DeploymentBucketName": "amplify-favpic-favpic-145648-deployment",
+            "UnauthRoleName": "amplify-favpic-favpic-145648-unauthRole",
+            "StackName": "amplify-favpic-favpic-145648",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:633566444129:stack/amplify-favpic-favpic-145648/90ac1a90-50cc-11ea-99c4-0ac3b391d020",
+            "AmplifyAppId": "dsvpcoittyyk"
+        },
+        "categories": {
+            "auth": {
+                "favpic0d6b94c4": {}
+            }
+        }
+    }
+}
