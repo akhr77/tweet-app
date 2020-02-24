@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"log"
 
+	"github.com/akhr77/favpic/app/infrastructure"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
@@ -43,30 +45,26 @@ func (a *api) IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *api) UploadS3(w http.ResponseWriter, r *http.Request) {
-	// sess := session.Must(session.NewSession(&aws.Config{
-	// 	Region:      aws.String("ap-northeast-1"),
-	// 	Credentials: credentials.NewSharedCredentials("", "defult"),
-	// }))
-
-	// uploader := s3manager.NewUploader(sess)
-
-	// result, err := uploader.Upload(&s3manager.UploadInput{
-	// 	Bucket: aws.String("amplify-favpic-favpic-145648-deployment"),
-	// 	Key:    aws.String("favpic"),
-	// 	Body:   data,
-	// })
-
-	// //結果表示
-	// if err == nil {
-	// 	fmt.Println(result.Location)
-	// } else {
-	// 	fmt.Println("error happend!!!")
-	// }
+	// formデータの解析
 	r.ParseForm()
-	message := r.Form.Get("message")
-	image := r.Form.Get("image")
-	log.Println(message)
-	log.Println(image)
+	file := r.Form.Get("image")
+	// data, _ := base64.StdEncoding.DecodeString(image)
+	// wb := new(bytes.Buffer)
+	// wb.Write(data)
+
+	// S3への接続
+	var (
+		err   error
+		awsS3 *infrastructure.AwsS3
+		url   string
+	)
+	awsS3 = infrastructure.NewAwsS3()
+	url, err = awsS3.UploadImage(file, "test", "jpeg")
+	if err != nil {
+		fmt.Print(err.Error())
+		return
+	}
+	log.Println(url)
 
 	http.Redirect(w, r, "/", http.StatusFound)
 }

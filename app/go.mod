@@ -1,4 +1,4 @@
-module tweet-app
+module favpic-app
 
 go 1.13
 
