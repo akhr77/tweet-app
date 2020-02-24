@@ -1,23 +1,8 @@
 <template>
-  <div id="home">
+  <div id="list">
     <el-container>
-      <el-header>
-        <div>
-          <span>お試し機能をご利用したい場合は、</span>
-          <el-link href="https://element.eleme.io" target="_blank">こちらからゲストユーザーでログインしてください。</el-link>
-        </div>
-      </el-header>
       <el-main>
-        <div class="nav-menu">
-          <a class="home" font-weight-bold href="/">
-            <b>FavPic</b>
-          </a>
-          <el-row>
-            <el-button round class="nav-login">
-              <router-link to="/login">ログイン</router-link>
-            </el-button>
-          </el-row>
-        </div>
+        <div class="nav-menu"></div>
         <!-- 写真イメージをCardで表示 -->
         <el-row>
           <el-col :span="6" v-for="(o, index) in 3" :key="o" :offset="index > 0 ? 3 : 0">
@@ -62,12 +47,9 @@ export default {
     };
   },
   mounted() {
-    this.$axios
-      .get("http://localhost/api/")
-      .then(response => {
-        this.info = response.data;
-      })
-      .catch(error => console.log(error));
+    this.$axios.get("http://localhost/api/").then(response => {
+      this.info = response.data;
+    });
   }
 };
 </script>

@@ -29,10 +29,9 @@ func main() {
 	}
 
 	app := &api{db: db}
-
 	r := mux.NewRouter()
 	r.HandleFunc("/", app.IndexHandler)
-	r.HandleFunc("/tweet/", CreatePostTweet)
+	r.HandleFunc("/uploads3", app.UploadS3)
 	r.HandleFunc("/tweet_delete", DeleteTweet)
 	http.ListenAndServe(":8082", r)
 }

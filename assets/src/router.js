@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from './views/Home.vue'
+import List from './views/List.vue'
 import Login from './views/Login.vue'
+import Detail from './views/Detail.vue'
+import Profile from './views/Profile.vue'
+import MyPage from './views/MyPage.vue'
+import Post from './views/Post.vue'
 import Sorry from './views/Sorry.vue';
 
 Vue.use(VueRouter)
@@ -12,14 +16,33 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/list',
+      name: 'list',
+      component: List,
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: Detail,
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
+    },
+    {
+      path: '/mypage',
+      name: 'mypage',
+      component: MyPage,
+    },
+    {
+      path: '/post',
+      name: 'post',
+      component: Post,
     },
     {
       path: '*',

@@ -1,5 +1,5 @@
 .env
 logs
 app/tmp
+app/infrastructure/Config.go
 assets/node_modules
-assets/src/cognito
