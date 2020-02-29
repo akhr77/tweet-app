@@ -1,5 +1,5 @@
 .env
 logs
 app/tmp
-app/infrastructure/Config.go
+app/utills/config.go
 assets/node_modules

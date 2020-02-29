@@ -8,8 +8,8 @@
           <div class="card-body">
             <input type="file" accept="image/*" @change="onFileChange($event)" />
           </div>
-          <div class="image-preview">
-            <img :src="imageData" v-if="imageData" />
+          <div class="image-preview-area">
+            <img class="image-preview" :src="imageData" v-if="imageData" />
           </div>
           <el-row>
             <el-button plain>キャンセル</el-button>
@@ -25,16 +25,19 @@
 export default {
   data() {
     return {
+      fileName: "",
+      fileType: "",
       imageData: ""
     };
   },
   methods: {
     onFileChange(e) {
       const files = e.target.files;
-
       if (files.length > 0) {
         const file = files[0];
         const reader = new FileReader();
+        this.fileName = file.name;
+        this.fileType = file.type;
         reader.onload = e => {
           this.imageData = e.target.result;
         };
@@ -43,7 +46,8 @@ export default {
     },
     post() {
       let params = new URLSearchParams();
-      params.append("message", "success");
+      params.append("fileName", this.fileName);
+      params.append("fileType", this.fileType);
       params.append("image", this.imageData);
       this.$axios
         .post("http://localhost/api/uploads3", params)
@@ -54,4 +58,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+@media screen and (min-width: 768px) {
+  .image-preview {
+    max-width: 870px;
+  }
+}
+</style>
 

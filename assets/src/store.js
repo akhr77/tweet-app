@@ -5,7 +5,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    user: null
+    userName: '',
+    email: ''
   },
   mutations: {
     // ユーザー情報保存

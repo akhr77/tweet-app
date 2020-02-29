@@ -6,15 +6,14 @@
         <el-link href="https://element.eleme.io" target="_blank">こちらからゲストユーザーでログインしてください。</el-link>
       </div>
     </el-header>
-    <div style="height: 200px">
-      <el-image :src="src"></el-image>
-    </div>
-    <div v-if="!signedIn">
-      <amplify-authenticator></amplify-authenticator>
-    </div>
-    <div v-if="signedIn">
-      <amplify-sign-out></amplify-sign-out>
-    </div>
+    <el-main>
+      <div v-if="!signedIn">
+        <amplify-authenticator></amplify-authenticator>
+      </div>
+      <div v-if="signedIn">
+        <amplify-sign-out></amplify-sign-out>
+      </div>
+    </el-main>
   </div>
 </template>
 
@@ -25,16 +24,19 @@ export default {
   name: "login",
   data() {
     return {
-      signedIn: false,
-      src: "static/login_background.jpg"
+      signedIn: false
     };
   },
   async beforeCreate() {
     // 認証状態の設定
     try {
-      await Auth.currentAuthenticatedUser();
+      const user = await Auth.currentAuthenticatedUser();
+      const userSession = await Auth.currentSession();
       this.signedIn = true;
-      this.$router.push({ path: "list" });
+      this.$store.state.userName = user.username;
+      this.$store.state.email = user.attributes.email;
+      console.log("user=", user);
+      console.log("userSession=", userSession);
     } catch (err) {
       this.signedIn = false;
     }

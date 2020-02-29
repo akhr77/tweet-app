@@ -1,10 +1,12 @@
-package infrastructure
+package utills
 
 import (
 	"bytes"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"log"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -19,7 +21,7 @@ type AwsS3 struct {
 }
 
 type AwsS3URLs struct {
-	Prefix string
+	Dir string
 }
 
 func NewAwsS3() *AwsS3 {
@@ -40,35 +42,24 @@ func NewAwsS3() *AwsS3 {
 	return &AwsS3{
 		Config: config,
 		Keys: AwsS3URLs{
-			Prefix: "favpic/images",
+			Dir: "images/develop",
 		},
 		// Create an uploader with the session and default options
 		Uploader: s3manager.NewUploader(sess),
 	}
 }
 
-func (a *AwsS3) UploadImage(file string, fileName string, extension string) (url string, err error) {
+func (a *AwsS3) UploadImage(file string, fileName string, fileType string) (url string, err error) {
 
 	if fileName == "" {
 		return "", errors.New("fileName is required")
 	}
+	b64data := file[strings.IndexByte(file, ',')+1:]
 
-	var contentType string
-
-	switch extension {
-	case "jpg":
-		contentType = "image/jpeg"
-	case "jpeg":
-		contentType = "image/jpeg"
-	case "gif":
-		contentType = "image/gif"
-	case "png":
-		contentType = "image/png"
-	default:
-		return "", errors.New("this extension is invalid")
+	data, err := base64.StdEncoding.DecodeString(b64data)
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	data, _ := base64.StdEncoding.DecodeString(file)
 	wb := new(bytes.Buffer)
 	wb.Write(data)
 
@@ -77,8 +68,8 @@ func (a *AwsS3) UploadImage(file string, fileName string, extension string) (url
 		ACL:         aws.String("public-read"),
 		Body:        wb,
 		Bucket:      aws.String(a.Config.Aws.S3.Bucket),
-		ContentType: aws.String(contentType),
-		Key:         aws.String(a.Keys.Prefix + "/" + fileName + "." + extension),
+		ContentType: aws.String(fileType),
+		Key:         aws.String(a.Keys.Dir + "/" + fileName),
 	})
 
 	if err != nil {

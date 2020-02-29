@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 import VueCookie from 'vue-cookie'
 import axios from 'axios'
 import './plugins/element.js'
@@ -10,7 +11,6 @@ import { AmplifyPlugin } from 'aws-amplify-vue'
 import awsconfig from './aws-exports'
 Amplify.configure(awsconfig)
 
-Vue.use(router)
 Vue.use(AmplifyPlugin, AmplifyModules)
 Vue.use(VueCookie)
 Vue.prototype.$axios = axios
@@ -37,5 +37,6 @@ AmplifyModules.I18n.putVocabularies(messageResource)
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app')
