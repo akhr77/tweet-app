@@ -11,13 +11,15 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 type AwsS3 struct {
-	Config   *Config
-	Keys     AwsS3URLs
-	Uploader *s3manager.Uploader
+	Config     *Config
+	Keys       AwsS3URLs
+	Uploader   *s3manager.Uploader
+	Downloader *s3manager.Downloader
 }
 
 type AwsS3URLs struct {
@@ -28,7 +30,6 @@ func NewAwsS3() *AwsS3 {
 
 	config := NewConfig()
 
-	// The session the S3 Uploader will use
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		Config: aws.Config{
 			Credentials: credentials.NewStaticCredentialsFromCreds(credentials.Value{
@@ -44,8 +45,8 @@ func NewAwsS3() *AwsS3 {
 		Keys: AwsS3URLs{
 			Dir: "images/develop",
 		},
-		// Create an uploader with the session and default options
-		Uploader: s3manager.NewUploader(sess),
+		Uploader:   s3manager.NewUploader(sess),
+		Downloader: s3manager.NewDownloader(sess),
 	}
 }
 
@@ -77,4 +78,23 @@ func (a *AwsS3) UploadImage(file string, fileName string, fileType string) (url 
 	}
 
 	return result.Location, nil
+}
+
+func (a *AwsS3) DownloadImage(fileName string) (image string, err error) {
+
+	file := &aws.WriteAtBuffer{}
+
+	n, err := a.Downloader.Download(file, &s3.GetObjectInput{
+		Bucket: aws.String(a.Config.Aws.S3.Bucket),
+		Key:    aws.String("images/develop/login_background.jpg"),
+	})
+
+	if err != nil {
+		return "", fmt.Errorf("failed to download file, %v", err)
+	}
+	fmt.Printf("numBytes:%d", n)
+
+	base64Data := base64.StdEncoding.EncodeToString(file.Bytes())
+
+	return base64Data, nil
 }

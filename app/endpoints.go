@@ -66,6 +66,24 @@ func (a *api) UploadS3(w http.ResponseWriter, r *http.Request) {
 	// http.Redirect(w, r, "/", http.StatusFound)
 }
 
+type DownloadImage struct {
+	Image string `json:"image"`
+}
+
+func (a *api) DownloadS3(w http.ResponseWriter, r *http.Request) {
+	// S3への接続
+	var awsS3 *utills.AwsS3
+	awsS3 = utills.NewAwsS3()
+	base64Image, err := awsS3.DownloadImage("test")
+	if err != nil {
+		log.Fatal(err)
+	}
+	base64Image = "data:image/jpeg:base64," + base64Image
+	downloadImage := DownloadImage {Image: base64Image}
+
+	json.NewEncoder(w).Encode(downloadImage)
+}
+
 // func CreatePostTweet(w http.ResponseWriter, r *http.Request) {
 // 	db, err := sqlx.Open(driverName, dsn)
 // 	if err != nil {

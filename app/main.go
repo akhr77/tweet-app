@@ -31,5 +31,6 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", app.IndexHandler)
 	r.HandleFunc("/uploads3", app.UploadS3)
+	r.HandleFunc("/downloadS3", app.DownloadS3)
 	http.ListenAndServe(":8082", r)
 }
