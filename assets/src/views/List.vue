@@ -6,19 +6,19 @@
           <span class="header-brand">FavPic</span>
         </router-link>
         <router-link to="search">
-          <i class="header-search fas fa-search fa-2x"></i>
+          <i class="header-search fas fa-search fa-lg"></i>
         </router-link>
         <router-link to="users">
-          <i class="header-users fas fa-users fa-2x"></i>
+          <i class="header-users fas fa-users fa-lg"></i>
         </router-link>
         <router-link to="logout">
-          <i class="header-logout fas fa-sign-out-alt fa-2x"></i>
+          <i class="header-logout fas fa-sign-out-alt fa-lg"></i>
         </router-link>
         <router-link to="post">
-          <i class="header-post fas fa-plus fa-2x"></i>
+          <i class="header-post fas fa-plus fa-lg"></i>
         </router-link>
         <router-link to="mypage">
-          <i class="header-mypage fas fa-user-cog fa-2x"></i>
+          <i class="header-mypage fas fa-user-cog fa-lg"></i>
         </router-link>
       </el-header>
       <el-main>
@@ -71,12 +71,17 @@ export default {
           Avater: "",
           Image: ""
         }
-      ]
+      ],
+      image: {}
     };
   },
   mounted() {
     this.$axios.get("http://localhost/api/").then(response => {
       this.info = response.data;
+    });
+
+    this.$axios.get("http://localhost/api/downloadS3").then(response => {
+      this.image = response.data;
     });
   }
 };
@@ -134,7 +139,7 @@ export default {
   margin: 0px 12px;
   font-weight: 900;
   float: left;
-  font-size: 30px;
+  font-size: 24px;
   color: black;
 }
 

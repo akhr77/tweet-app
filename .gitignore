@@ -1,5 +1,6 @@
 .env
 logs
 app/tmp
+# AWS API_KEY
 app/utills/config.go
 assets/node_modules

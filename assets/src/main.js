@@ -2,19 +2,20 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import VueCookie from 'vue-cookie'
 import axios from 'axios'
+import Buefy from 'buefy';
 import './plugins/element.js'
 
 import Amplify, * as AmplifyModules from 'aws-amplify'
 import { AmplifyPlugin } from 'aws-amplify-vue'
 import awsconfig from './aws-exports'
 Amplify.configure(awsconfig)
-
+Vue.use(Buefy)
 Vue.use(AmplifyPlugin, AmplifyModules)
-Vue.use(VueCookie)
+
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
+// axios.defaults.baseURL = 'http://localhost:8082';
 
 let messageResource = {
   ja: {
