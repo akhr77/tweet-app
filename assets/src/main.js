@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import Buefy from 'buefy';
+import 'buefy/dist/buefy.css'
 import './plugins/element.js'
 
 import Amplify, * as AmplifyModules from 'aws-amplify'
@@ -29,7 +30,8 @@ let messageResource = {
     'No account? ': ' ',
     'Create account': 'アカウント作成',
     'Sign In': 'サインイン',
-    'User does not exist.': '登録がされていないユーザー名です。',
+    'Sign Out': 'サインアウト',
+    'User does not exist. ': '登録がされていないユーザー名です。',
     'Password attempts exceeded': 'パスワードの試行回数を超えました。',
     'Incorrect username or password.': 'ユーザー名またはパスワードが間違っています。'
   }

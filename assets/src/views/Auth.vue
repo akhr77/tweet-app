@@ -18,8 +18,6 @@
 </template>
 
 <script>
-// import { AmplifyEventBus } from "aws-amplify-vue";
-// import { Auth } from "aws-amplify";
 export default {
   name: "auth",
   data() {

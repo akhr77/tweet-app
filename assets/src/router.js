@@ -6,6 +6,7 @@ import Detail from './views/Detail.vue'
 import Profile from './views/Profile.vue'
 import MyPage from './views/MyPage.vue'
 import Post from './views/Post.vue'
+import Logout from './views/Logout.vue'
 import Sorry from './views/Sorry.vue';
 import store from './store';
 
@@ -79,6 +80,18 @@ const router = new VueRouter({
       path: '/post',
       name: 'post',
       component: Post,
+      beforeEnter(to, from, next) {
+        if (store.getters.signIn) {
+          next()
+        } else {
+          next('./')
+        }
+      }
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout,
       beforeEnter(to, from, next) {
         if (store.getters.signIn) {
           next()
