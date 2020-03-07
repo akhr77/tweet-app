@@ -95,7 +95,6 @@ export default {
 
     this.$axios.get("http://localhost/api/downloadS3").then(response => {
       this.base64image = response.data.image;
-      console.log(this.base64image);
     });
   }
 };
