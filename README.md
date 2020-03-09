@@ -14,4 +14,4 @@ Vue.js , VueClI , Vuex , Vue Router , axios , amprify , Buefy , element
 ### Backend:
 Go(1.13) , gorilla/mux , jmoiron/sqlx
 ### Infra:
-AWS (Cognito , ECR , ECS , RDS , Route53, ALB , VPC, ACM, Lambda)
+AWS (Cognito , ECR , ECS , RDS , Route53, ALB , VPC, ACM, Lambda, codeBuild, codeDeploy, codePipeline)
