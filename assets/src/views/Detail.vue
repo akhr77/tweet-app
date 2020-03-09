@@ -10,6 +10,7 @@
 
 <script>
 export default {
+  name: "detail",
   data() {
     return {};
   }

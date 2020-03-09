@@ -17,7 +17,6 @@ const (
 )
 
 func init() {
-	log.SetPrefix("[Log]")
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 }
 
@@ -32,6 +31,6 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", app.IndexHandler)
 	r.HandleFunc("/uploads3", app.UploadS3)
-	r.HandleFunc("/tweet_delete", DeleteTweet)
+	r.HandleFunc("/downloadS3", app.DownloadS3)
 	http.ListenAndServe(":8082", r)
 }
