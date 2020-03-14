@@ -1,0 +1,22 @@
+version: '3'
+services:
+    vue:
+        image: 633566444129.dkr.ecr.ap-northeast-1.amazonaws.com/favpic-vue:latest
+        container_name: favpic-vue
+        ports:
+            - 8080:8080
+        volumes:
+            - .:/app
+        working_dir: /app
+        tty: true
+        # command: sh -c "cd assets && yarn install && yarn serve"
+
+    go:
+        image: 633566444129.dkr.ecr.ap-northeast-1.amazonaws.com/favpic-go:latest
+        container_name: favpic-go
+        volumes:
+            - .:/go/src
+        ports:
+            - 8082:8082
+        working_dir: /go/src/app
+        tty: true
