@@ -9,7 +9,7 @@ services:
             - /home/ec2-user:/app
         working_dir: /app
         tty: true
-        command: sh -c "cd assets && yarn install && yarn serve"
+        command: sh -c "cd assets && yarn install && yarn serve && npm run build"
 
     go:
         image: 633566444129.dkr.ecr.ap-northeast-1.amazonaws.com/favpic-go:latest

@@ -1,23 +1,13 @@
 <template>
   <div id="post">
-    <el-container>
-      <el-main>
-        <h1>新しい投稿</h1>
-
-        <div class="card" style="width: 20rem;margin:10px;">
-          <div class="card-body">
-            <input type="file" accept="image/*" @change="onFileChange($event)" />
-          </div>
-          <div class="image-preview-area">
-            <img class="image-preview" :src="imageData" v-if="imageData" />
-          </div>
-          <el-row>
-            <el-button plain>キャンセル</el-button>
-            <el-button plain @click="post">投稿</el-button>
-          </el-row>
-        </div>
-      </el-main>
-    </el-container>
+    <h1>新しい投稿</h1>
+    <i aria-hidden="true" class="fa fa-plus"></i>
+    <input type="file" accept="image/*" @change="onFileChange($event)" />
+    <div class="image-preview-area">
+      <img class="image-preview" :src="imageData" v-if="imageData" />
+    </div>
+    <el-button plain>キャンセル</el-button>
+    <el-button plain @click="post">投稿</el-button>
   </div>
 </template>
 
