@@ -1,13 +1,20 @@
 <template>
   <div id="post">
-    <h1>新しい投稿</h1>
-    <i aria-hidden="true" class="fa fa-plus"></i>
-    <input type="file" accept="image/*" @change="onFileChange($event)" />
-    <div class="image-preview-area">
-      <img class="image-preview" :src="imageData" v-if="imageData" />
+    <div class="columns is-desktop">
+      <h1>新しい投稿</h1>
+      <div class="column" v-if="imageData">
+        <div class="buttuns">
+          <b-button rounded>キャンセル</b-button>
+          <b-button rounded @click="post">投稿</b-button>
+        </div>
+        <img class="image-preview" :src="imageData" />
+      </div>
+      <div class="column" v-else>
+        <div class="image-form">
+          <input type="file" accept="image/*" @change="onFileChange($event)" />
+        </div>
+      </div>
     </div>
-    <el-button plain>キャンセル</el-button>
-    <el-button plain @click="post">投稿</el-button>
   </div>
 </template>
 
@@ -50,10 +57,17 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 768px) {
-  .image-preview {
-    max-width: 870px;
-  }
+.image-form {
+  max-width: 500px;
+  height: 300px;
+  background-color: red;
+  border-radius: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.image-preview {
+  max-width: 500px;
 }
 </style>
 

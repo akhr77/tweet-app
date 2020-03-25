@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-      <div class="column">
+      <!-- <div class="column">
         <div class="card">
           <div class="card-image">
             <figure class="image is-4by3">
@@ -66,7 +66,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -75,16 +75,7 @@
 export default {
   data() {
     return {
-      info: [
-        {
-          ID: "",
-          UserName: "",
-          Email: "",
-          EncrypedPassword: "",
-          Avater: "",
-          Image: ""
-        }
-      ],
+      info: [],
       base64image: ""
     };
   },
@@ -92,10 +83,20 @@ export default {
     this.$axios.get("http://localhost/api/").then(response => {
       this.info = response.data;
     });
-
-    this.$axios.get("http://localhost/api/downloadS3").then(response => {
-      this.base64image = response.data.image;
-    });
+  },
+  watch: {
+    info() {
+      this.downloadS3(this.info[0].Image);
+    }
+  },
+  methods: {
+    downloadS3(image) {
+      this.$axios
+        .get("http://localhost/api/downloadS3", { params: { image: image } })
+        .then(response => {
+          this.base64image = response.data.image;
+        });
+    }
   }
 };
 </script>
