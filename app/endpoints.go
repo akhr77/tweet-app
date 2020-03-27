@@ -94,7 +94,7 @@ func (a *api) DownloadS3(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	base64Image = "data:image/jpeg;base64," + base64Image
-	downloadImage := DownloadImage{image: base64Image}
+	downloadImage := DownloadImage{Image: base64Image}
 
 	json.NewEncoder(w).Encode(downloadImage)
 	// fmt.Fprintln(w, base64Image)
