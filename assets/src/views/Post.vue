@@ -41,6 +41,7 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+
     post() {
       let params = new URLSearchParams();
       params.append("fileName", this.fileName);

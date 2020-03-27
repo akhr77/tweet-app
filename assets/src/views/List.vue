@@ -1,5 +1,12 @@
 <template>
   <div id="list">
+    <div class="tab">
+      <b-tabs type="is-toggle" expanded>
+        <b-tab-item label="新着"></b-tab-item>
+        <b-tab-item label="フォロー中"></b-tab-item>
+        <b-tab-item label="人気"></b-tab-item>
+      </b-tabs>
+    </div>
     <div class="columns is-desktop">
       <div v-for="info in postInfos" :key="info.ID">
         <div class="column is-3bydesktop">
@@ -20,7 +27,7 @@
                   </figure>
                 </div>
                 <div class="media-content">
-                  <p class="title is-4">{{ info.userName }}</p>
+                  <p class="title is-4">{{ "@" + info.userName }}</p>
                 </div>
               </div>
             </div>
@@ -80,19 +87,6 @@ export default {
       this.postInfos.push(Vue.util.extend({}, this.postInfo));
       console.log("set base64");
     }
-
-    // format3items() {
-    //   var baseArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    //   var b = baseArr.length,
-    //     cnt = 3,
-    //     newArr = [];
-
-    //   for (var i = 0; i < Math.ceil(b / cnt); i++) {
-    //     var j = i * cnt;
-    //     var p = baseArr.slice(j, j + cnt);
-    //     newArr.push(p);
-    //   }
-    // }
   }
 };
 </script>
@@ -103,10 +97,18 @@ export default {
 }
 
 .is-3bydesktop {
-  min-width: 380px;
+  min-width: 450px;
+  max-width: 650px;
 }
 
 .is-desktop {
   flex-wrap: wrap;
+  margin: 0px 20px;
+}
+
+.tab {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
 }
 </style>
