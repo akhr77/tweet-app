@@ -86,8 +86,7 @@ func (a *AwsS3) DownloadImage(imagePath string) (image string, err error) {
 
 	_, err = a.Downloader.Download(file, &s3.GetObjectInput{
 		Bucket: aws.String(a.Config.Aws.S3.Bucket),
-		// Key:    aws.String("images/develop/login_background.jpg"),
-		Key: aws.String(imagePath),
+		Key:    aws.String(imagePath),
 	})
 
 	if err != nil {
