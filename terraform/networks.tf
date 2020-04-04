@@ -13,7 +13,17 @@ resource "aws_subnet" "public-subnet-1a" {
   map_public_ip_on_launch = true
   availability_zone       = "ap-northeast-1a"
   tags = {
-    Name = "vpc-sub-pub-favpic-1a"
+    Name = "public-subnet-1a"
+  }
+}
+
+resource "aws_subnet" "public-subnet-1c" {
+  vpc_id                  = aws_vpc.favpic-vpc.id
+  cidr_block              = "10.0.11.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = "ap-northeast-1c"
+  tags = {
+    Name = "public-subnet-1c"
   }
 }
 
@@ -23,7 +33,7 @@ resource "aws_subnet" "private-subnet-1a" {
   map_public_ip_on_launch = false
   availability_zone       = "ap-northeast-1a"
   tags = {
-    Name = "vpc-sub-pri-favpic-1a"
+    Name = "private-subnet-1a"
   }
 }
 
@@ -33,7 +43,7 @@ resource "aws_subnet" "private-subnet-1c" {
   map_public_ip_on_launch = false
   availability_zone       = "ap-northeast-1c"
   tags = {
-    Name = "vpc-sub-pri-favpic-1c"
+    Name = "private-subnet-1c"
   }
 }
 
@@ -55,8 +65,13 @@ resource "aws_route_table" "favpic-route-table" {
   }
 }
 
-resource "aws_route_table_association" "fabpic-sbn-rtb" {
+resource "aws_route_table_association" "fabpic-sbn-rtb-1a" {
   subnet_id      = aws_subnet.public-subnet-1a.id
+  route_table_id = aws_route_table.favpic-route-table.id
+}
+
+resource "aws_route_table_association" "fabpic-sbn-rtb-1c" {
+  subnet_id      = aws_subnet.public-subnet-1c.id
   route_table_id = aws_route_table.favpic-route-table.id
 }
 

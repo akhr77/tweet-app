@@ -16,7 +16,7 @@ resource "aws_security_group_rule" "ingress" {
   to_port           = var.port
   protocol          = "tcp"
   cidr_blocks       = var.cidr_blocks
-  security_group_id = aws_security_group_default.id
+  security_group_id = aws_security_group.default.id
 }
 
 resource "aws_security_group_rule" "egress" {
@@ -25,7 +25,7 @@ resource "aws_security_group_rule" "egress" {
   to_port           = 0
   protocol          = "-1"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group_default.id
+  security_group_id = aws_security_group.default.id
 }
 
 output "security_group_id" {
