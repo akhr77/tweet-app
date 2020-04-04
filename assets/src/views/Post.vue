@@ -1,7 +1,6 @@
 <template>
   <div id="post">
     <div class="columns is-desktop">
-      <h1>新しい投稿</h1>
       <div class="column" v-if="imageData">
         <div class="buttuns">
           <b-button rounded>キャンセル</b-button>
@@ -14,6 +13,10 @@
           <input type="file" accept="image/*" @change="onFileChange($event)" />
         </div>
       </div>
+    </div>
+    <div class="post-form-area">
+      <i class="fas fa-camera fa-5x post-form"></i>
+      <input type="file" accept="image/*" @change="onFileChange($event)" />
     </div>
   </div>
 </template>
@@ -51,6 +54,7 @@ export default {
         .post("http://localhost/api/uploads3", params)
         .then(response => {
           console.log(response);
+          this.$router.push("list");
         });
     }
   }
@@ -69,6 +73,20 @@ export default {
 
 .image-preview {
   max-width: 500px;
+}
+
+.post-form-area {
+  max-width: 550px;
+  height: 300px;
+  margin: 0 auto 1rem auto;
+  width: 100%;
+  background-color: #e9ecef;
+}
+
+.post-form {
+  background-color: rgba(0, 0, 0, 0.1);
+  height: 80%;
+  width: 80%;
 }
 </style>
 

@@ -1,10 +1,6 @@
 <template>
   <div id="mypage">
-    <el-container>
-      <el-main>
-        <h1>MyPage ページ</h1>
-      </el-main>
-    </el-container>
+    <h1>MyPage ページ</h1>
   </div>
 </template>
 

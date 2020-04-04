@@ -1,10 +1,6 @@
 <template>
   <div id="logout">
-    <el-container>
-      <el-main>
-        <amplify-sign-out v-bind:signOutConfig="signOutConfig"></amplify-sign-out>
-      </el-main>
-    </el-container>
+    <amplify-sign-out v-bind:signOutConfig="signOutConfig"></amplify-sign-out>
   </div>
 </template>
 

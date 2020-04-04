@@ -1,12 +1,12 @@
 <template>
-  <div id="detail">
-    <h1>Detail ページ</h1>
+  <div id="search">
+    <h1>search ページ</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: "detail",
+  name: "search",
   data() {
     return {};
   }
