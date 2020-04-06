@@ -10,14 +10,8 @@
       <!-- 画像選択 -->
       <div v-show="!resizedImg" class="resize-img__post">
         <label for="file" class="resize-img__post__label">
-          投稿画像選択
-          <input
-            id="file"
-            ref="fileInput"
-            type="file"
-            accept=".jpeg, .png"
-            @change="uploadImg"
-          />
+          <i class="fas fa-camera fa-5x"></i>
+          <input id="file" ref="fileInput" type="file" accept=".jpeg, .png" @change="uploadImg" />
         </label>
       </div>
       <!-- プレビュー -->
@@ -147,19 +141,60 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .post-form-area {
   max-width: 550px;
-  height: 300px;
   margin: 0 auto 1rem auto;
   width: 100%;
-  background-color: #e9ecef;
 }
 
-.post-form {
-  background-color: rgba(0, 0, 0, 0.1);
-  height: 80%;
-  width: 80%;
+.resize-img {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  margin-top: 20px;
+
+  &__post {
+    border: 1px solid rgba(#000, 0.16);
+    line-height: 30rem;
+
+    &__label {
+      display: inline-block;
+      width: 100%;
+      color: rgba(0, 0, 0, 0.4);
+      text-align: center;
+
+      & > input {
+        display: none;
+      }
+    }
+  }
+
+  &__preview {
+    width: 300px;
+    height: 300px;
+
+    &__circle {
+      position: absolute;
+      right: 37px;
+      width: 27px;
+      height: 27px;
+      margin: 5px;
+      padding: 2px 9px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.3);
+
+      &__close-icon {
+        color: #fff;
+      }
+    }
+
+    &__canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 }
 </style>
 
