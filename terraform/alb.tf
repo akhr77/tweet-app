@@ -16,24 +16,24 @@ resource "aws_lb" "favpic-lb" {
   ]
 }
 
-# resource "aws_lb_listener" "favpic-https" {
-#   load_balancer_arn = aws_lb.favpic-lb.arn
-#   port              = "443"
-#   protocol          = "HTTPS"
-#   certificate_arn   = aws_acm_certificate.favpic-certificate.arn
-#   ssl_policy        = "ELBSecurityPolicy-2016-08"
+resource "aws_lb_listener" "favpic-https" {
+  load_balancer_arn = aws_lb.favpic-lb.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = aws_acm_certificate.favpic-certificate.arn
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
 
-#   default_action {
-#     # target_group_arn = aws_lb_target_group.favpic-http.arn
-#     # type             = "forward"
-#     type = "fixed-response"
-#     fixed_response {
-#       content_type = "text/plain"
-#       message_body = "これはHTTPSです"
-#       status_code  = "200"
-#     }
-#   }
-# }
+  default_action {
+    # target_group_arn = aws_lb_target_group.favpic-http.arn
+    # type             = "forward"
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "これはHTTPSです"
+      status_code  = "200"
+    }
+  }
+}
 
 resource "aws_lb_listener" "favpic-http" {
   load_balancer_arn = aws_lb.favpic-lb.arn
