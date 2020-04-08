@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"log"
-
 	"app/utills"
+	"log"
+	"time"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
@@ -54,14 +55,26 @@ func (a *api) UploadS3(w http.ResponseWriter, r *http.Request) {
 	var (
 		err   error
 		awsS3 *utills.AwsS3
-		url   string
+		// url   string
 	)
 	awsS3 = utills.NewAwsS3()
-	url, err = awsS3.UploadImage(file, fileName, fileType)
+	_, err = awsS3.UploadImage(file, fileName, fileType)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(url)
+
+	jst, _ := time.LoadLocation("Asia/Tokyo")
+	now := time.Now().In(jst)
+	_, err = a.db.NamedExec(`INSERT INTO posts (user_id,image,comment,created_at,updated_at) VALUES (:userId,:image,:comment,:created,:updated)`, map[string]interface{}{
+		"userId":  1,
+		"image":   "images/develop/" + fileName,
+		"comment": "アップロードできたー",
+		"created": now,
+		"updated": now,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// http.Redirect(w, r, "/", http.StatusFound)
 }
@@ -71,33 +84,21 @@ type DownloadImage struct {
 }
 
 func (a *api) DownloadS3(w http.ResponseWriter, r *http.Request) {
+	// クエリパラメータのパース
+	imagePath := r.URL.Query().Get("image")
 	// S3への接続
 	var awsS3 *utills.AwsS3
 	awsS3 = utills.NewAwsS3()
-	base64Image, err := awsS3.DownloadImage("test")
+	base64Image, err := awsS3.DownloadImage(imagePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 	base64Image = "data:image/jpeg;base64," + base64Image
-	downloadImage := DownloadImage {Image: base64Image}
+	downloadImage := DownloadImage{Image: base64Image}
 
 	json.NewEncoder(w).Encode(downloadImage)
+	// fmt.Fprintln(w, base64Image)
 }
-
-// func CreatePostTweet(w http.ResponseWriter, r *http.Request) {
-// 	db, err := sqlx.Open(driverName, dsn)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	v := r.FormValue("tweet")
-// 	_, err = db.NamedExec(`INSERT INTO tweets (tweet) VALUES (:tweet)`, map[string]interface{}{
-// 		"tweet": v,
-// 	})
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	http.Redirect(w, r, "/", http.StatusFound)
-// }
 
 // func DeleteTweet(w http.ResponseWriter, r *http.Request) {
 // 	db, err := sqlx.Open(driverName, dsn)

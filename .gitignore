@@ -4,3 +4,6 @@ app/tmp
 # AWS API_KEY
 app/utills/config.go
 assets/node_modules
+# terraform
+terraform/.terraform
+terraform/terraform*

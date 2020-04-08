@@ -80,19 +80,19 @@ func (a *AwsS3) UploadImage(file string, fileName string, fileType string) (url 
 	return result.Location, nil
 }
 
-func (a *AwsS3) DownloadImage(fileName string) (image string, err error) {
+func (a *AwsS3) DownloadImage(imagePath string) (image string, err error) {
 
 	file := &aws.WriteAtBuffer{}
 
-	n, err := a.Downloader.Download(file, &s3.GetObjectInput{
+	_, err = a.Downloader.Download(file, &s3.GetObjectInput{
 		Bucket: aws.String(a.Config.Aws.S3.Bucket),
-		Key:    aws.String("images/develop/login_background.jpg"),
+		Key:    aws.String(imagePath),
 	})
 
 	if err != nil {
 		return "", fmt.Errorf("failed to download file, %v", err)
 	}
-	fmt.Printf("numBytes:%d", n)
+	// fmt.Printf("numBytes:%d", n)
 
 	base64Data := base64.StdEncoding.EncodeToString(file.Bytes())
 
