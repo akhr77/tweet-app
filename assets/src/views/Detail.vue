@@ -1,6 +1,8 @@
 <template>
   <div id="detail">
-    <h1>Detail ページ</h1>
+    <div class="container">
+      <h1>Detail ページ</h1>
+    </div>
   </div>
 </template>
 

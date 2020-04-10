@@ -1,6 +1,8 @@
 <template>
   <div id="search">
-    <h1>search ページ</h1>
+    <div class="container">
+      <h1>search ページ</h1>
+    </div>
   </div>
 </template>
 

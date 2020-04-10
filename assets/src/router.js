@@ -7,6 +7,7 @@ import Profile from './views/Profile.vue'
 import MyPage from './views/MyPage.vue'
 import Post from './views/Post.vue'
 import Search from './views/Search.vue'
+import UserEdit from './views/UserEdit.vue'
 import Logout from './views/Logout.vue'
 import Sorry from './views/Sorry.vue';
 import store from './store';
@@ -93,6 +94,18 @@ const router = new VueRouter({
       path: '/search',
       name: 'search',
       component: Search,
+      beforeEnter(to, from, next) {
+        if (store.getters.signIn) {
+          next()
+        } else {
+          next('./')
+        }
+      }
+    },
+    {
+      path: '/useredit',
+      name: 'useredit',
+      component: UserEdit,
       beforeEnter(to, from, next) {
         if (store.getters.signIn) {
           next()

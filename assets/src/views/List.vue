@@ -1,33 +1,35 @@
 <template>
   <div id="list">
-    <div class="tab">
-      <b-tabs type="is-toggle" expanded>
-        <b-tab-item label="新着"></b-tab-item>
-        <b-tab-item label="フォロー中"></b-tab-item>
-        <b-tab-item label="人気"></b-tab-item>
-      </b-tabs>
-    </div>
-    <div class="columns is-desktop">
-      <div v-for="info in postInfos" :key="info.ID">
-        <div class="column is-3bydesktop">
-          <div class="card">
-            <div class="card-image">
-              <figure class="image is-4by3">
-                <img :src="info.base64image" alt="Placeholder image" />
-              </figure>
-            </div>
-            <div class="card-content">
-              <div class="media">
-                <div class="media-left">
-                  <figure class="image is-48x48">
-                    <img
-                      src="https://bulma.io/images/placeholders/96x96.png"
-                      alt="Placeholder image"
-                    />
-                  </figure>
-                </div>
-                <div class="media-content">
-                  <p class="title is-4">{{ "@" + info.userName }}</p>
+    <div class="container">
+      <div class="tab">
+        <b-tabs type="is-toggle" expanded>
+          <b-tab-item label="新着"></b-tab-item>
+          <b-tab-item label="フォロー中"></b-tab-item>
+          <b-tab-item label="人気"></b-tab-item>
+        </b-tabs>
+      </div>
+      <div class="columns is-desktop">
+        <div v-for="info in postInfos" :key="info.ID">
+          <div class="column is-3bydesktop">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-4by3">
+                  <img :src="info.base64image" alt="Placeholder image" />
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-left">
+                    <figure class="image is-48x48">
+                      <img
+                        src="https://bulma.io/images/placeholders/96x96.png"
+                        alt="Placeholder image"
+                      />
+                    </figure>
+                  </div>
+                  <div class="media-content">
+                    <p class="title is-4">{{ "@" + info.userName }}</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -97,8 +99,8 @@ export default {
 }
 
 .is-3bydesktop {
-  min-width: 450px;
-  max-width: 650px;
+  min-width: 400px;
+  max-width: 700px;
 }
 
 .is-desktop {

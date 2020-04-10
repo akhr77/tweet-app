@@ -6,20 +6,22 @@
       <img class="preview" :src="imageData" />
     </div>-->
 
-    <div class="resize-img">
-      <!-- 画像選択 -->
-      <div v-show="!resizedImg" class="resize-img__post">
-        <label for="file" class="resize-img__post__label">
-          <i class="fas fa-camera fa-5x"></i>
-          <input id="file" ref="fileInput" type="file" accept=".jpeg, .png" @change="uploadImg" />
-        </label>
-      </div>
-      <!-- プレビュー -->
-      <div v-show="resizedImg" class="resize-img__preview">
-        <canvas ref="canvas" class="resize-img__preview__canvas" />
-        <div class="buttuns">
-          <b-button rounded @click="clearUploadImg">キャンセル</b-button>
-          <b-button rounded @click="post">投稿</b-button>
+    <div class="container">
+      <div class="resize-img">
+        <!-- 画像選択 -->
+        <div v-show="!resizedImg" class="resize-img__post">
+          <label for="file" class="resize-img__post__label">
+            <i class="fas fa-camera fa-5x"></i>
+            <input id="file" ref="fileInput" type="file" accept=".jpeg, .png" @change="uploadImg" />
+          </label>
+        </div>
+        <!-- プレビュー -->
+        <div v-show="resizedImg" class="resize-img__preview">
+          <canvas ref="canvas" class="resize-img__preview__canvas" />
+          <div class="buttuns">
+            <b-button rounded @click="clearUploadImg">キャンセル</b-button>
+            <b-button rounded @click="post">投稿</b-button>
+          </div>
         </div>
       </div>
     </div>
@@ -173,21 +175,6 @@ export default {
   &__preview {
     width: 300px;
     height: 300px;
-
-    &__circle {
-      position: absolute;
-      right: 37px;
-      width: 27px;
-      height: 27px;
-      margin: 5px;
-      padding: 2px 9px;
-      border-radius: 50%;
-      background-color: rgba(0, 0, 0, 0.3);
-
-      &__close-icon {
-        color: #fff;
-      }
-    }
 
     &__canvas {
       width: 100%;
