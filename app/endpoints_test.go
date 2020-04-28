@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/Cside/jsondiff"
 	"github.com/DATA-DOG/go-sqlmock"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -57,5 +57,80 @@ func TestIndexHandler(t *testing.T) {
 	app.assertJSON(w.Body.Bytes(), data, t)
 	if err := mock.ExpectationsWereMet(); err != nil {
 		t.Errorf("there were unfulfilled expectations: %s", err)
+	}
+}
+
+func Test_api_IndexHandler(t *testing.T) {
+	type fields struct {
+		db *sqlx.DB
+	}
+	type args struct {
+		w http.ResponseWriter
+		r *http.Request
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &api{
+				db: tt.fields.db,
+			}
+			a.IndexHandler(tt.args.w, tt.args.r)
+		})
+	}
+}
+
+func Test_api_UploadS3(t *testing.T) {
+	type fields struct {
+		db *sqlx.DB
+	}
+	type args struct {
+		w http.ResponseWriter
+		r *http.Request
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &api{
+				db: tt.fields.db,
+			}
+			a.UploadS3(tt.args.w, tt.args.r)
+		})
+	}
+}
+
+func Test_api_DownloadS3(t *testing.T) {
+	type fields struct {
+		db *sqlx.DB
+	}
+	type args struct {
+		w http.ResponseWriter
+		r *http.Request
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			a := &api{
+				db: tt.fields.db,
+			}
+			a.DownloadS3(tt.args.w, tt.args.r)
+		})
 	}
 }

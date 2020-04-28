@@ -8,7 +8,7 @@
           <b-tab-item label="人気"></b-tab-item>
         </b-tabs>
       </div>
-      <div class="columns is-desktop">
+      <div class="columns is-mobile">
         <div v-for="info in postInfos" :key="info.ID">
           <div class="column is-3bydesktop">
             <div class="card">
@@ -67,27 +67,36 @@ export default {
 
     async downloadS3(userPosts) {
       for (const userPost of userPosts) {
-        console.log("userPost=", userPost);
         const response = await this.$axios.get(
-          "http://localhost/api/downloadS3",
+          "http://localhost/api/download/s3",
           {
             params: { image: userPost.Image }
           }
         );
         this.setBase64image(userPost, response.data.image);
-        console.log("response=", response);
       }
+    },
+
+    setUserId(userId) {
+      console.log("userId", userId);
+      this.$store.dispatch("userId", userId);
+    },
+
+    setAvater(avater) {
+      console.log("avater", avater);
+      this.$store.dispatch("avater", avater);
     },
 
     setBase64image(userPost, base64image) {
       this.postInfo.id = userPost.ID;
+      this.setUserId(this.postInfo.id);
       this.postInfo.userName = userPost.UserName;
       this.postInfo.email = userPost.Email;
       this.postInfo.avater = userPost.Avater;
+      this.setAvater(this.postInfo.avater);
       this.postInfo.image = userPost.Image;
       this.postInfo.base64image = base64image;
       this.postInfos.push(Vue.util.extend({}, this.postInfo));
-      console.log("set base64");
     }
   }
 };
@@ -99,13 +108,13 @@ export default {
 }
 
 .is-3bydesktop {
-  min-width: 400px;
+  min-width: 430px;
   max-width: 700px;
 }
 
-.is-desktop {
+.is-mobile {
   flex-wrap: wrap;
-  margin: 0px 20px;
+  margin: 0px 1em;
 }
 
 .tab {

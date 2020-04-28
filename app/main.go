@@ -30,7 +30,9 @@ func main() {
 	app := &api{db: db}
 	r := mux.NewRouter()
 	r.HandleFunc("/", app.IndexHandler)
-	r.HandleFunc("/uploads3", app.UploadS3)
-	r.HandleFunc("/downloadS3", app.DownloadS3)
+	r.HandleFunc("/upload/s3", app.UploadS3)
+	r.HandleFunc("/download/s3", app.DownloadS3)
+	r.HandleFunc("/user", app.user)
+	r.HandleFunc("/updateUser", app.UpdateUser)
 	http.ListenAndServe(":8082", r)
 }

@@ -1,7 +1,7 @@
 <template>
   <div id="mypage">
     <div class="container">
-      <div class="columns">
+      <div class="columns is-mobile">
         <div class="column is-4">
           <img src="https://bulma.io/images/placeholders/96x96.png" alt="Avatar" class="avatar" />
         </div>
@@ -11,7 +11,9 @@
           <router-link to="useredit">
             <b-button class="column__button" rounded @click="clearUploadImg">プロフィールの変更</b-button>
           </router-link>
-          <b-button class="column__button" rounded @click="post">ログアウト</b-button>
+          <router-link to="logout">
+            <b-button class="column__button" rounded>ログアウト</b-button>
+          </router-link>
           <div align="left" class="profile"></div>
         </div>
       </div>

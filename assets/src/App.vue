@@ -21,9 +21,14 @@
           <i class="header-mypage fas fa-user-cog fa-lg"></i>
         </router-link>
       </el-header>
-    </div>
 
-    <router-view />
+      <router-view />
+    </div>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>Copyright ©2020 FavPic, All Rights Reserved.</p>
+      </div>
+    </footer>
   </div>
 </template>
 

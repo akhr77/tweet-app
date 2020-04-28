@@ -1,11 +1,5 @@
 <template>
   <div id="post">
-    <!-- <div class="post-form-area">
-      <i class="fas fa-camera fa-5x post-form"></i>
-      <input type="file" accept="image/*" @change="onFileChange($event)" />
-      <img class="preview" :src="imageData" />
-    </div>-->
-
     <div class="container">
       <div class="resize-img">
         <!-- 画像選択 -->
@@ -48,7 +42,7 @@ export default {
       params.append("fileType", this.fileType);
       params.append("image", this.imageData);
       this.$axios
-        .post("http://localhost/api/uploads3", params)
+        .post("http://localhost/api/upload/s3", params)
         .then(response => {
           console.log(response);
           this.$router.push("list");
@@ -56,6 +50,7 @@ export default {
     },
 
     uploadImg(e) {
+      console.log("uploadImg");
       const file = e.target.files[0];
       const reader = new FileReader();
       this.fileName = file.name;
@@ -71,7 +66,10 @@ export default {
       image.crossOrigin = "Anonymous";
 
       image.onload = () => {
+        console.log("generateImgUrl");
+        console.log(image);
         const resizedBase64 = this.makeResizeImg(image);
+        console.log(resizedBase64);
         this.imageData = resizedBase64;
         // リサイズ済みのBase64をblobに変換
         const resizedBlob = this.base64ToBlob(resizedBase64);
@@ -155,7 +153,7 @@ export default {
   height: 300px;
   margin: 0 auto;
   margin-top: 20px;
-
+  margin-bottom: 12em;
   &__post {
     border: 1px solid rgba(#000, 0.16);
     line-height: 30rem;
