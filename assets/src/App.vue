@@ -1,27 +1,34 @@
 <template>
   <div id="app">
-    <el-header>
-      <router-link to="list">
-        <span class="header-brand">FavPic</span>
-      </router-link>
-      <router-link to="search">
-        <i class="header-search fas fa-search fa-lg"></i>
-      </router-link>
-      <router-link to="users">
-        <i class="header-users fas fa-users fa-lg"></i>
-      </router-link>
-      <router-link to="logout">
-        <i class="header-logout fas fa-sign-out-alt fa-lg"></i>
-      </router-link>
-      <router-link to="post">
-        <i class="header-post fas fa-plus fa-lg"></i>
-      </router-link>
-      <router-link to="mypage">
-        <i class="header-mypage fas fa-user-cog fa-lg"></i>
-      </router-link>
-    </el-header>
+    <div class="container">
+      <el-header>
+        <router-link to="list">
+          <span class="header-brand">FavPic</span>
+        </router-link>
+        <router-link to="search">
+          <i class="header-search fas fa-search fa-lg"></i>
+        </router-link>
+        <router-link to="users">
+          <i class="header-users fas fa-users fa-lg"></i>
+        </router-link>
+        <router-link to="logout">
+          <i class="header-logout fas fa-sign-out-alt fa-lg"></i>
+        </router-link>
+        <router-link to="post">
+          <i class="header-post fas fa-plus fa-lg"></i>
+        </router-link>
+        <router-link to="mypage">
+          <i class="header-mypage fas fa-user-cog fa-lg"></i>
+        </router-link>
+      </el-header>
 
-    <router-view />
+      <router-view />
+    </div>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>Copyright ©2020 FavPic, All Rights Reserved.</p>
+      </div>
+    </footer>
   </div>
 </template>
 

@@ -1,25 +1,21 @@
 <template>
   <div id="post">
-    <!-- <div class="post-form-area">
-      <i class="fas fa-camera fa-5x post-form"></i>
-      <input type="file" accept="image/*" @change="onFileChange($event)" />
-      <img class="preview" :src="imageData" />
-    </div>-->
-
-    <div class="resize-img">
-      <!-- 画像選択 -->
-      <div v-show="!resizedImg" class="resize-img__post">
-        <label for="file" class="resize-img__post__label">
-          <i class="fas fa-camera fa-5x"></i>
-          <input id="file" ref="fileInput" type="file" accept=".jpeg, .png" @change="uploadImg" />
-        </label>
-      </div>
-      <!-- プレビュー -->
-      <div v-show="resizedImg" class="resize-img__preview">
-        <canvas ref="canvas" class="resize-img__preview__canvas" />
-        <div class="buttuns">
-          <b-button rounded @click="clearUploadImg">キャンセル</b-button>
-          <b-button rounded @click="post">投稿</b-button>
+    <div class="container">
+      <div class="resize-img">
+        <!-- 画像選択 -->
+        <div v-show="!resizedImg" class="resize-img__post">
+          <label for="file" class="resize-img__post__label">
+            <i class="fas fa-camera fa-5x"></i>
+            <input id="file" ref="fileInput" type="file" accept=".jpeg, .png" @change="uploadImg" />
+          </label>
+        </div>
+        <!-- プレビュー -->
+        <div v-show="resizedImg" class="resize-img__preview">
+          <canvas ref="canvas" class="resize-img__preview__canvas" />
+          <div class="buttuns">
+            <b-button rounded @click="clearUploadImg">キャンセル</b-button>
+            <b-button rounded @click="post">投稿</b-button>
+          </div>
         </div>
       </div>
     </div>
@@ -46,7 +42,7 @@ export default {
       params.append("fileType", this.fileType);
       params.append("image", this.imageData);
       this.$axios
-        .post("http://localhost/api/uploads3", params)
+        .post("http://localhost/api/upload/s3", params)
         .then(response => {
           console.log(response);
           this.$router.push("list");
@@ -54,6 +50,7 @@ export default {
     },
 
     uploadImg(e) {
+      console.log("uploadImg");
       const file = e.target.files[0];
       const reader = new FileReader();
       this.fileName = file.name;
@@ -69,7 +66,10 @@ export default {
       image.crossOrigin = "Anonymous";
 
       image.onload = () => {
+        console.log("generateImgUrl");
+        console.log(image);
         const resizedBase64 = this.makeResizeImg(image);
+        console.log(resizedBase64);
         this.imageData = resizedBase64;
         // リサイズ済みのBase64をblobに変換
         const resizedBlob = this.base64ToBlob(resizedBase64);
@@ -153,7 +153,7 @@ export default {
   height: 300px;
   margin: 0 auto;
   margin-top: 20px;
-
+  margin-bottom: 12em;
   &__post {
     border: 1px solid rgba(#000, 0.16);
     line-height: 30rem;
@@ -173,21 +173,6 @@ export default {
   &__preview {
     width: 300px;
     height: 300px;
-
-    &__circle {
-      position: absolute;
-      right: 37px;
-      width: 27px;
-      height: 27px;
-      margin: 5px;
-      padding: 2px 9px;
-      border-radius: 50%;
-      background-color: rgba(0, 0, 0, 0.3);
-
-      &__close-icon {
-        color: #fff;
-      }
-    }
 
     &__canvas {
       width: 100%;

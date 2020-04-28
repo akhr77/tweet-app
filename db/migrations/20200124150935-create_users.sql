@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS users(
     username VARCHAR(60) NOT NULL,
     email VARCHAR(100) NOT NULL,
     avater CHAR(100),
+    user_profile CHAR(200),
     guest_flag CHAR(1),
     admin_flag CHAR(1),
     created_at timestamp,

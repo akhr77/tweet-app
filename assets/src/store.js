@@ -8,13 +8,18 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    userId: 0,
+    avater: '',
     userName: '',
     email: '',
     idToken: null,
     signIn: false
   },
   getters: {
-    signIn: state => state.signIn
+    signIn: state => state.signIn,
+    userId: state => state.userId,
+    avater: state => state.avater,
+    userName: state => state.userName,
   },
   mutations: {
     setUser(state, user) {
@@ -25,6 +30,13 @@ const store = new Vuex.Store({
     setAuthState(state, auth) {
       state.signIn = auth;
     },
+    setUserId(state, userId) {
+      state.userId = userId;
+    },
+    setAvater(state, avater) {
+      state.avater = avater;
+    }
+
   },
   actions: {
     async login({ commit }) {
@@ -46,7 +58,13 @@ const store = new Vuex.Store({
           commit("setAuthState", false)
         }
       });
-    }
+    },
+    userId({ commit }, userId) {
+      commit("setUserId", userId)
+    },
+    avater({ commit }, avater) {
+      commit("setAvater", avater)
+    },
   }
 });
 
