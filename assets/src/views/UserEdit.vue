@@ -4,7 +4,8 @@
       <div class="profile-header">プロフィールを編集</div>
       <div class="columns">
         <div class="column is-4">
-          <img :src="avaterData" alt="Avater" class="avater" />
+          <img v-show="!resizedImg" :src="avaterData" alt="Avater" class="avater" />
+          <img v-show="resizedImg" :src="resizedImg" alt="Avater" class="avater" />
           <canvas v-show="false" ref="canvas" class="resize-img__preview__canvas" />
           <label for="file" class="resize-img__post__label">
             <div class="edit-avater-label">
@@ -42,7 +43,8 @@ export default {
       userName: "",
       avater: "",
       userProfile: "",
-      avaterData: ""
+      avaterData: "",
+      resizedImg: null
     };
   },
   mixins: [Post],
@@ -70,7 +72,7 @@ export default {
       params.append("userName", this.userName);
       params.append("userProfile", this.userProfile);
       this.$axios
-        .post("http://localhost/api/UpdateUser", params)
+        .post("http://localhost/api/updateUser", params)
         .then(response => {
           console.log(response);
           this.$router.push("mypage");

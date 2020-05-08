@@ -61,29 +61,24 @@ export default {
   },
   methods: {
     async getUserPostInfo() {
-      const response = await this.$axios.get("http://localhost/api/");
+      const response = await this.$axios.get("http://localhost/api/post");
       this.downloadS3(response.data);
     },
 
     async downloadS3(userPosts) {
       for (const userPost of userPosts) {
-        const response = await this.$axios.get(
-          "http://localhost/api/download/s3",
-          {
-            params: { image: userPost.Image }
-          }
-        );
+        const response = await this.$axios.get("http://localhost/api/image", {
+          params: { image: userPost.Image }
+        });
         this.setBase64image(userPost, response.data.image);
       }
     },
 
     setUserId(userId) {
-      console.log("userId", userId);
       this.$store.dispatch("userId", userId);
     },
 
     setAvater(avater) {
-      console.log("avater", avater);
       this.$store.dispatch("avater", avater);
     },
 
