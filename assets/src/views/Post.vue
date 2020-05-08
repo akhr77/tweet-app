@@ -50,7 +50,6 @@ export default {
     },
 
     uploadImg(e) {
-      console.log("uploadImg");
       const file = e.target.files[0];
       const reader = new FileReader();
       this.fileName = file.name;
@@ -66,10 +65,7 @@ export default {
       image.crossOrigin = "Anonymous";
 
       image.onload = () => {
-        console.log("generateImgUrl");
-        console.log(image);
         const resizedBase64 = this.makeResizeImg(image);
-        console.log(resizedBase64);
         this.imageData = resizedBase64;
         // リサイズ済みのBase64をblobに変換
         const resizedBlob = this.base64ToBlob(resizedBase64);

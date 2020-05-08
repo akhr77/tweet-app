@@ -106,7 +106,7 @@ func (a *api) DownloadS3(w http.ResponseWriter, r *http.Request) {
 	// fmt.Fprintln(w, base64Image)
 }
 
-func (a *api) user(w http.ResponseWriter, r *http.Request) {
+func (a *api) User(w http.ResponseWriter, r *http.Request) {
 	var user user
 	id := r.URL.Query().Get("id")
 	imagePath := r.URL.Query().Get("avater")
@@ -136,6 +136,7 @@ func (a *api) user(w http.ResponseWriter, r *http.Request) {
 func (a *api) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	// formデータの解析
 	r.ParseForm()
+	log.Print(r)
 	userId := r.Form.Get("userId")
 	fileName := r.Form.Get("fileName")
 	fileType := r.Form.Get("fileType")
@@ -143,30 +144,34 @@ func (a *api) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	avater := r.Form.Get("avater")
 	userProfile := r.Form.Get("userProfile")
 
-	// S3への接続
-	var (
-		err   error
-		awsS3 *utills.AwsS3
-		// url   string
-	)
-	awsS3 = utills.NewAwsS3()
-	_, err = awsS3.UploadImage(avater, fileName, fileType)
-	if err != nil {
-		log.Fatal(err)
+	log.Print(avater)
+	if avater != "" {
+		// S3への接続
+		var (
+			err   error
+			awsS3 *utills.AwsS3
+			// url   string
+		)
+		awsS3 = utills.NewAwsS3()
+		_, err = awsS3.UploadImage(avater, fileName, fileType)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	jst, _ := time.LoadLocation("Asia/Tokyo")
 	now := time.Now().In(jst)
-	_, err = a.db.NamedExec(`UPDATE users SET username = :userName, user_profile = :userProfile WHERE u.id = :userId`, map[string]interface{}{
-		"userId":       userId,
-		"username":     userName,
-		"avater":       "images/develop/" + fileName,
+	rows, err := a.db.NamedExec(`UPDATE users SET username = :username WHERE id = :userid`, map[string]interface{}{
+		"userid":   userId,
+		"username": userName,
+		// "avater":       "images/develop/" + fileName,
 		"user_profile": userProfile,
 		"updated":      now,
 	})
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Print(rows)
 }
 
 // func DeleteTweet(w http.ResponseWriter, r *http.Request) {
