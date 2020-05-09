@@ -3,7 +3,6 @@ package db
 import (
 	"log"
 
-	"github.com/akhr77/favpic/app/entity"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -39,6 +38,6 @@ func Close() {
 }
 
 func autoMigration() {
-	db.AutoMigrate(&entity.User)
-	db.AutoMigrate(&entity.Post)
+	// db.AutoMigrate(&entity.User)
+	// db.AutoMigrate(&entity.Post)
 }

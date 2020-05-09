@@ -1,18 +1,19 @@
 package service
 
-mport (
+import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/akhr77/favpic/app/utills"
 	"log"
-	"time"
 
+	"github.com/akhr77/favpic/app/db"
+	"github.com/akhr77/favpic/app/entity"
+	"github.com/akhr77/favpic/app/utills"
 )
 
 type userPost struct {
 	ID       int    `db:"id"`
-	UserName string `db:"username"`
+	Username string `db:"username"`
 	Email    string `db:"email"`
 	Avater   string `db:"avater"`
 	Image    string `db:"image"`
@@ -20,52 +21,55 @@ type userPost struct {
 
 type userPosts []userPost
 
-func List(w http.ResponseWriter, r *http.Request) {
-	log.Print("Listにはきたよ")
+// PostList action: GET /post
+// 投稿全件を取得
+func PostList(w http.ResponseWriter, r *http.Request) {
 	var userPosts userPosts
 	db := db.GetDB()
-	db.Table("users").Select("users.id, users.username, users.email, users.avater").Joins("left join posts on users.id = posts.user_id").Scan(&userPosts)
+	db.Table("users").Select("users.id, users.username, users.email, users.avater, posts.image").Joins("left join posts on posts.user_id = users.id").Scan(&userPosts)
 
 	json.NewEncoder(w).Encode(userPosts)
 }
 
-func (a *api) UploadS3(w http.ResponseWriter, r *http.Request) {
-	// formデータの解析
-	r.ParseForm()
-	fileName := r.Form.Get("fileName")
-	fileType := r.Form.Get("fileType")
-	file := r.Form.Get("image")
+// func UploadS3(w http.ResponseWriter, r *http.Request) {
+// 	// formデータの解析
+// 	r.ParseForm()
+// 	fileName := r.Form.Get("fileName")
+// 	fileType := r.Form.Get("fileType")
+// 	file := r.Form.Get("image")
 
-	// S3への接続
-	var (
-		err   error
-		awsS3 *utills.AwsS3
-		// url   string
-	)
-	awsS3 = utills.NewAwsS3()
-	_, err = awsS3.UploadImage(file, fileName, fileType)
-	if err != nil {
-		log.Fatal(err)
-	}
+// 	// S3への接続
+// 	var (
+// 		err   error
+// 		awsS3 *utills.AwsS3
+// 		// url   string
+// 	)
+// 	awsS3 = utills.NewAwsS3()
+// 	_, err = awsS3.UploadImage(file, fileName, fileType)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
 
-	jst, _ := time.LoadLocation("Asia/Tokyo")
-	now := time.Now().In(jst)
-	_, err = a.db.NamedExec(`INSERT INTO posts (user_id,image,comment,created_at,updated_at) VALUES (:userId,:image,:comment,:created,:updated)`, map[string]interface{}{
-		"userId":  1,
-		"image":   "images/develop/" + fileName,
-		"comment": "アップロードできたー",
-		"created": now,
-		"updated": now,
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-}
+// 	jst, _ := time.LoadLocation("Asia/Tokyo")
+// 	now := time.Now().In(jst)
+// 	_, err = a.db.NamedExec(`INSERT INTO posts (user_id,image,comment,created_at,updated_at) VALUES (:userId,:image,:comment,:created,:updated)`, map[string]interface{}{
+// 		"userId":  1,
+// 		"image":   "images/develop/" + fileName,
+// 		"comment": "アップロードできたー",
+// 		"created": now,
+// 		"updated": now,
+// 	})
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// }
 
 type DownloadImage struct {
 	Image string `json:"image"`
 }
 
+// Show action: GET /image
+// 写真を取得
 func Show(w http.ResponseWriter, r *http.Request) {
 	// クエリパラメータのパース
 	imagePath := r.URL.Query().Get("image")
@@ -82,8 +86,11 @@ func Show(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(downloadImage)
 }
 
-func (a *api) User(w http.ResponseWriter, r *http.Request) {
-	var user user
+// UserbyId action: GET /user
+// Userを取得
+func UserbyID(w http.ResponseWriter, r *http.Request) {
+	db := db.GetDB()
+	var u entity.User
 	id := r.URL.Query().Get("id")
 	imagePath := r.URL.Query().Get("avater")
 	// S3への接続
@@ -94,31 +101,24 @@ func (a *api) User(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	base64Image = "data:image/jpeg;base64," + base64Image
-	user.Image = base64Image
+	u.Avater = base64Image
 
-	rows, err := a.db.NamedQuery(`SELECT u.id,u.username,u.avater,u.user_profile FROM users u WHERE u.id = :userId`, map[string]interface{}{"userId": id})
-	if err != nil {
-		log.Fatal(err)
-	}
-	for rows.Next() {
-		err := rows.StructScan(&user)
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
-	json.NewEncoder(w).Encode(user)
+	db.Where("id = ?", id).First(&u)
+	json.NewEncoder(w).Encode(&u)
 }
 
-func (a *api) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	// formデータの解析
+// Update action: PUT /user
+// user情報を更新
+func Update(w http.ResponseWriter, r *http.Request) {
+	log.Print("アップデート処理だぞー")
+	db := db.GetDB()
 	r.ParseForm()
 	log.Print(r)
-	userId := r.Form.Get("userId")
 	fileName := r.Form.Get("fileName")
 	fileType := r.Form.Get("fileType")
-	userName := r.Form.Get("userName")
+	username := r.Form.Get("username")
 	avater := r.Form.Get("avater")
-	userProfile := r.Form.Get("userProfile")
+	// userProfile := r.Form.Get("userProfile")
 
 	log.Print(avater)
 	if avater != "" {
@@ -135,17 +135,15 @@ func (a *api) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	jst, _ := time.LoadLocation("Asia/Tokyo")
-	now := time.Now().In(jst)
-	rows, err := a.db.NamedExec(`UPDATE users SET username = :username WHERE id = :userid`, map[string]interface{}{
-		"userid":   userId,
-		"username": userName,
-		// "avater":       "images/develop/" + fileName,
-		"user_profile": userProfile,
-		"updated":      now,
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Print(rows)
+	// jst, _ := time.LoadLocation("Asia/Tokyo")
+	// now := time.Now().In(jst)
+	var u entity.User
+	db.First(&u)
+	u.Username = username
+	db.Save(&u)
+	// db.Model(&u).Updates(map[string]interface{}{
+	// 	"username":     username,
+	// 	"user_profile": userProfile,
+	// 	// "updated":    now,
+	// })
 }

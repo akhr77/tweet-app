@@ -1,9 +1,10 @@
 package main
 
 import (
-	"app/db"
-	"app/server"
 	"log"
+
+	"github.com/akhr77/favpic/app/db"
+	"github.com/akhr77/favpic/app/server"
 )
 
 // const (

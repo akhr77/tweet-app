@@ -10,7 +10,7 @@ const store = new Vuex.Store({
   state: {
     userId: 0,
     avater: '',
-    userName: '',
+    username: '',
     email: '',
     idToken: null,
     signIn: false
@@ -19,11 +19,11 @@ const store = new Vuex.Store({
     signIn: state => state.signIn,
     userId: state => state.userId,
     avater: state => state.avater,
-    userName: state => state.userName,
+    username: state => state.username,
   },
   mutations: {
     setUser(state, user) {
-      state.userName = user.username;
+      state.username = user.username;
       state.email = user.attributes.email;
       state.idToken = user.signInUserSession.idToken
     },

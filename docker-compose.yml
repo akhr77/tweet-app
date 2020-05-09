@@ -13,9 +13,9 @@ services:
         command: sh -c "cd assets && yarn install && yarn serve && npm run build"
 
     go:
-        # build:
-        #     context: ./docker/go
-        image: 633566444129.dkr.ecr.ap-northeast-1.amazonaws.com/favpic-go
+        build:
+            context: ./docker/go
+        # image: 633566444129.dkr.ecr.ap-northeast-1.amazonaws.com/favpic-go
         container_name: favpic-go
         volumes:
             - .:/go/src
