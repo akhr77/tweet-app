@@ -94,7 +94,9 @@ func Download(w http.ResponseWriter, r *http.Request) {
 func UserbyID(w http.ResponseWriter, r *http.Request) {
 	db := db.GetDB()
 	var u userPost
-	// id := r.URL.Query().Get("id")
+	id := r.URL.Query().Get("id")
+	db.Where("id = ?", id)
+	db.Table("users").Select("users.id, users.username, users.email, users.avater, users.user_profile, posts.image").Joins("left join posts on posts.user_id = users.id").Scan(&u)
 	imagePath := r.URL.Query().Get("avater")
 	// S3への接続
 	var awsS3 *utills.AwsS3
@@ -104,8 +106,6 @@ func UserbyID(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	base64Image = "data:image/jpeg;base64," + base64Image
-
-	db.Table("users").Select("users.id, users.username, users.email, users.avater, users.user_profile, posts.image").Joins("left join posts on posts.user_id = users.id").Scan(&u)
 	u.Image = base64Image
 
 	json.NewEncoder(w).Encode(&u)
@@ -118,11 +118,11 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	db := db.GetDB()
 	r.ParseForm()
 	log.Print(r)
+	id := r.Form.Get("id")
 	fileName := r.Form.Get("fileName")
 	fileType := r.Form.Get("fileType")
 	username := r.Form.Get("username")
 	avater := r.Form.Get("avater")
-	// userProfile := r.Form.Get("userProfile")
 
 	log.Print(avater)
 	if avater != "" {
@@ -142,12 +142,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 	// jst, _ := time.LoadLocation("Asia/Tokyo")
 	// now := time.Now().In(jst)
 	var u entity.User
-	db.First(&u)
+	db.Where("id = ?", id)
 	u.Username = username
-	db.Save(&u)
-	// db.Model(&u).Updates(map[string]interface{}{
-	// 	"username":     username,
-	// 	"user_profile": userProfile,
-	// 	// "updated":    now,
-	// })
+	db.Model(&u).Updates(map[string]interface{}{"username": username})
 }

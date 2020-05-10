@@ -66,6 +66,7 @@ export default {
     },
     post() {
       let params = new URLSearchParams();
+      params.append("id", this.$store.getters.userId);
       params.append("fileName", this.fileName);
       params.append("fileType", this.fileType);
       params.append("avater", this.imageData);

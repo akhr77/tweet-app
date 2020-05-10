@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    userId: 0,
+    userId: 0,  
     avater: '',
     username: '',
     email: '',
