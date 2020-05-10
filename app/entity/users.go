@@ -1,11 +1,13 @@
-// package entity
+package entity
 
-// type User struct {
-// 	Model
-// 	UserName    string
-// 	Email       string
-// 	Avater      string
-// 	UserProfile string
-// 	GuestFlag   string
-// 	AdminFlag   string
-// }
+import "github.com/jinzhu/gorm"
+
+type User struct {
+	gorm.Model
+	Username    string `json:"username"`
+	Email       string `json:"email"`
+	Avater      string `json:"avater"`
+	UserProfile string `json:"userProfile"`
+	GuestFlag   string `json:"guestFlag"`
+	AdminFlag   string `json:"adminFlag"`
+}

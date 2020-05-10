@@ -1,15 +1,13 @@
-module app
+module github.com/akhr77/favpic/app
 
 go 1.13
 
 require (
-	github.com/Cside/jsondiff v0.0.0-20180209072652-0e50d980b458
-	github.com/DATA-DOG/go-sqlmock v1.4.1
 	github.com/aws/aws-sdk-go v1.29.14
-	github.com/evanphx/json-patch v4.5.0+incompatible // indirect
-	github.com/go-sql-driver/mysql v1.5.0
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gorilla/mux v1.7.4
 	github.com/jinzhu/gorm v1.9.12
-	github.com/jmoiron/sqlx v1.2.0
-	github.com/sergi/go-diff v1.1.0 // indirect
+	github.com/kr/pretty v0.1.0 // indirect
+	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
+	gopkg.in/yaml.v2 v2.2.4 // indirect
 )

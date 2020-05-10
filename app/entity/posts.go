@@ -1,8 +1,12 @@
-// package entity
+package entity
 
-// type Post struct {
-// 	Model
-// 	UserId  uint
-// 	Image   string
-// 	Comment string
-// }
+import (
+	"github.com/jinzhu/gorm"
+)
+
+type Post struct {
+	gorm.Model
+	UserId  uint
+	Image   string
+	Comment string
+}

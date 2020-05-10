@@ -17,7 +17,7 @@
         <div class="column is-4">
           <div class="control">
             <div class="input-area">
-              <input class="input is-medium" type="text" placeholder="名前" v-model="userName" />
+              <input class="input is-medium" type="text" placeholder="名前" v-model="username" />
             </div>
             <div class="input-area">
               <textarea class="textarea is-medium" placeholder="自己紹介" v-model="userProfile"></textarea>
@@ -40,7 +40,7 @@ export default {
   },
   data() {
     return {
-      userName: "",
+      username: "",
       avater: "",
       userProfile: "",
       avaterData: "",
@@ -58,25 +58,24 @@ export default {
         .get("http://localhost/api/user", { params: queries })
         .then(response => {
           console.log(response.data);
-          this.userName = response.data.UserName;
+          this.username = response.data.Username;
           this.avater = response.data.Avater;
           this.userProfile = response.data.UserProfile;
-          this.avaterData = response.data.image;
+          this.avaterData = response.data.Image;
         });
     },
     post() {
       let params = new URLSearchParams();
+      params.append("id", this.$store.getters.userId);
       params.append("fileName", this.fileName);
       params.append("fileType", this.fileType);
       params.append("avater", this.imageData);
-      params.append("userName", this.userName);
+      params.append("username", this.username);
       params.append("userProfile", this.userProfile);
-      this.$axios
-        .post("http://localhost/api/updateUser", params)
-        .then(response => {
-          console.log(response);
-          this.$router.push("mypage");
-        });
+      this.$axios.post("http://localhost/api/user", params).then(response => {
+        console.log(response);
+        this.$router.push("mypage");
+      });
     },
     clear() {
       this.$router.push("mypage");

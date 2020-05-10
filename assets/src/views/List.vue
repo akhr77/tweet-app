@@ -28,7 +28,7 @@
                     </figure>
                   </div>
                   <div class="media-content">
-                    <p class="title is-4">{{ "@" + info.userName }}</p>
+                    <p class="title is-4">{{ "@" + info.username }}</p>
                   </div>
                 </div>
               </div>
@@ -84,13 +84,17 @@ export default {
 
     setBase64image(userPost, base64image) {
       this.postInfo.id = userPost.ID;
-      this.setUserId(this.postInfo.id);
-      this.postInfo.userName = userPost.UserName;
+      this.postInfo.username = userPost.Username;
       this.postInfo.email = userPost.Email;
       this.postInfo.avater = userPost.Avater;
-      this.setAvater(this.postInfo.avater);
       this.postInfo.image = userPost.Image;
       this.postInfo.base64image = base64image;
+      console.log(this.$store.getters.email);
+      console.log(userPost.Email);
+      if (this.$store.getters.email === userPost.Email) {
+        this.setUserId(this.postInfo.id);
+        this.setAvater(this.postInfo.avater);
+      }
       this.postInfos.push(Vue.util.extend({}, this.postInfo));
     }
   }
