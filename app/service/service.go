@@ -12,17 +12,18 @@ import (
 )
 
 type userPost struct {
-	ID       int    `db:"id"`
-	Username string `db:"username"`
-	Email    string `db:"email"`
-	Avater   string `db:"avater"`
-	Image    string `db:"image"`
+	ID          int    `db:"id"`
+	Username    string `db:"username"`
+	Email       string `db:"email"`
+	Avater      string `db:"avater"`
+	UserProfile string `db:"user_profile"`
+	Image       string `db:"image"`
 }
 
 type userPosts []userPost
 
 // PostList action: GET /post
-// 投稿全件を取得
+// 写真全件を取得
 func PostList(w http.ResponseWriter, r *http.Request) {
 	var userPosts userPosts
 	db := db.GetDB()
@@ -31,46 +32,48 @@ func PostList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(userPosts)
 }
 
-// func UploadS3(w http.ResponseWriter, r *http.Request) {
-// 	// formデータの解析
-// 	r.ParseForm()
-// 	fileName := r.Form.Get("fileName")
-// 	fileType := r.Form.Get("fileType")
-// 	file := r.Form.Get("image")
+// Upload action: Post /image
+// 写真を投稿
+func Upload(w http.ResponseWriter, r *http.Request) {
+	// // formデータの解析
+	// r.ParseForm()
+	// fileName := r.Form.Get("fileName")
+	// fileType := r.Form.Get("fileType")
+	// file := r.Form.Get("image")
 
-// 	// S3への接続
-// 	var (
-// 		err   error
-// 		awsS3 *utills.AwsS3
-// 		// url   string
-// 	)
-// 	awsS3 = utills.NewAwsS3()
-// 	_, err = awsS3.UploadImage(file, fileName, fileType)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
+	// // S3への接続
+	// var (
+	// 	err   error
+	// 	awsS3 *utills.AwsS3
+	// 	// url   string
+	// )
+	// awsS3 = utills.NewAwsS3()
+	// _, err = awsS3.UploadImage(file, fileName, fileType)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-// 	jst, _ := time.LoadLocation("Asia/Tokyo")
-// 	now := time.Now().In(jst)
-// 	_, err = a.db.NamedExec(`INSERT INTO posts (user_id,image,comment,created_at,updated_at) VALUES (:userId,:image,:comment,:created,:updated)`, map[string]interface{}{
-// 		"userId":  1,
-// 		"image":   "images/develop/" + fileName,
-// 		"comment": "アップロードできたー",
-// 		"created": now,
-// 		"updated": now,
-// 	})
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// }
+	// jst, _ := time.LoadLocation("Asia/Tokyo")
+	// now := time.Now().In(jst)
+	// _, err = a.db.NamedExec(`INSERT INTO posts (user_id,image,comment,created_at,updated_at) VALUES (:userId,:image,:comment,:created,:updated)`, map[string]interface{}{
+	// 	"userId":  1,
+	// 	"image":   "images/develop/" + fileName,
+	// 	"comment": "アップロードできたー",
+	// 	"created": now,
+	// 	"updated": now,
+	// })
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+}
 
 type DownloadImage struct {
 	Image string `json:"image"`
 }
 
-// Show action: GET /image
+// Download action: GET /image
 // 写真を取得
-func Show(w http.ResponseWriter, r *http.Request) {
+func Download(w http.ResponseWriter, r *http.Request) {
 	// クエリパラメータのパース
 	imagePath := r.URL.Query().Get("image")
 	// S3への接続
@@ -90,8 +93,8 @@ func Show(w http.ResponseWriter, r *http.Request) {
 // Userを取得
 func UserbyID(w http.ResponseWriter, r *http.Request) {
 	db := db.GetDB()
-	var u entity.User
-	id := r.URL.Query().Get("id")
+	var u userPost
+	// id := r.URL.Query().Get("id")
 	imagePath := r.URL.Query().Get("avater")
 	// S3への接続
 	var awsS3 *utills.AwsS3
@@ -101,9 +104,10 @@ func UserbyID(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	base64Image = "data:image/jpeg;base64," + base64Image
-	u.Avater = base64Image
 
-	db.Where("id = ?", id).First(&u)
+	db.Table("users").Select("users.id, users.username, users.email, users.avater, users.user_profile, posts.image").Joins("left join posts on posts.user_id = users.id").Scan(&u)
+	u.Image = base64Image
+
 	json.NewEncoder(w).Encode(&u)
 }
 

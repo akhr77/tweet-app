@@ -58,10 +58,10 @@ export default {
         .get("http://localhost/api/user", { params: queries })
         .then(response => {
           console.log(response.data);
-          this.username = response.data.username;
-          this.avater = response.data.avater;
-          this.userProfile = response.data.userProfile;
-          this.avaterData = response.data.image;
+          this.username = response.data.Username;
+          this.avater = response.data.Avater;
+          this.userProfile = response.data.UserProfile;
+          this.avaterData = response.data.Image;
         });
     },
     post() {

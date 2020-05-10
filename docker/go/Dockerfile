@@ -8,7 +8,8 @@ WORKDIR /go/src/app
 
 RUN apk update && \
     apk add vim curl git && \
-    go get github.com/pilu/fresh && \
-    go mod download
+    go get github.com/pilu/fresh
+
+# RUN go mod download
 
 CMD ["fresh"]

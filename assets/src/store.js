@@ -20,6 +20,7 @@ const store = new Vuex.Store({
     userId: state => state.userId,
     avater: state => state.avater,
     username: state => state.username,
+    email: state => state.email,
   },
   mutations: {
     setUser(state, user) {

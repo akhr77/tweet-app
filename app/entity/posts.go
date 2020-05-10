@@ -8,5 +8,5 @@ type Post struct {
 	Image     string
 	Comment   string
 	CreatedAt time.Time `json:"createdAt"`
-	updatedAt time.Time `json:"updatedAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
