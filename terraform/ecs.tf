@@ -1,50 +1,84 @@
-# resource "aws_ecs_cluster" "favpic-cluster" {
-#   name = "favpic-ecs-cluster"
-# }
 
-# resource "aws_ecs_task_definition" "favpic-task" {
-#   family                   = "favpic"
-#   cpu                      = "256"
-#   memory                   = "512"
-#   network_mode             = "awsvpc"
-#   requires_compatibilities = ["FARGATE"]
-#   container_definitions    = file("./container_definitions.json")
-# }
+resource "aws_ecs_cluster" "favpic-ecs-cluster" {
+  name               = "favpic-ecs-cluster"
+  capacity_providers = ["FARGATE"]
+  default_capacity_provider_strategy {
+    base              = 0
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
+}
 
-# resource "aws_ecs_service" "favpic-ecs-service" {
-#   name                              = "favpic-ecs-service"
-#   cluster                           = aws_ecs_cluster.favpic-cluster.arn
-#   task_definition                   = aws_ecs_task_definition.favpic-task.arn
-#   desired_count                     = 2
-#   launch_type                       = "FARGATE"
-#   platform_version                  = "1.3.0"
-#   health_check_grace_period_seconds = 60
+resource "aws_ecs_task_definition" "favpic" {
+  family                   = "favpic"
+  cpu                      = "256"
+  memory                   = "512"
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["FARGATE"]
+  container_definitions    = file("./task_definitions/service.json")
+  execution_role_arn       = module.ecs_task_execution_role.iam_role_arn
+}
 
-#   network_configuration {
-#     assign_public_ip = false
-#     security_groups  = [module.nginx_sg.security_group_id]
+resource "aws_ecs_service" "favpic" {
+  name                              = "favpic-ecs-service"
+  cluster                           = aws_ecs_cluster.favpic-ecs-cluster.arn
+  task_definition                   = aws_ecs_task_definition.favpic.arn
+  desired_count                     = 1
+  launch_type                       = "FARGATE"
+  platform_version                  = "1.3.0"
+  health_check_grace_period_seconds = 60
 
-#     subnets = [
-#       aws_subnet.private-subnet-1a.id,
-#       aws_subnet.private-subnet-1c.id,
-#     ]
-#   }
+  network_configuration {
+    assign_public_ip = false
+    security_groups  = [module.nginx_sg.security_group_id]
 
-#   load_balancer {
-#     target_group_arn = aws_lb_target_group.favpic-http.arn
-#     container_name   = "favpic-nginx"
-#     container_port   = 80
-#   }
+    subnets = [
+      aws_subnet.private-subnet-1a.id,
+      aws_subnet.private-subnet-1c.id,
+    ]
+  }
 
-#   lifecycle {
-#     ignore_changes = [task_definition]
-#   }
-# }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.favpic.arn
+    container_name   = "nginx"
+    container_port   = 80
+  }
 
-# module "nginx_sg" {
-#   source      = "./security_group"
-#   name        = "nginx-sg"
-#   vpc_id      = aws_vpc.favpic-vpc.id
-#   port        = 80
-#   cidr_blocks = [aws_vpc.favpic-vpc.cidr_block]
-# }
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
+}
+
+resource "aws_cloudwatch_log_group" "for_ecs" {
+  name              = "/ecs/favpic"
+  retention_in_days = 180
+}
+
+data "aws_iam_policy" "ecs_task_execution_role_policy" {
+  arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+data "aws_iam_policy_document" "ecs_task_execution" {
+  source_json = data.aws_iam_policy.ecs_task_execution_role_policy.policy
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ssm:GetParameters", "kms:Decrypt"]
+    resources = ["*"]
+  }
+}
+
+module "ecs_task_execution_role" {
+  source     = "./iam_role"
+  name       = "ecs-task-execution"
+  identifier = "ecs-tasks.amazonaws.com"
+  policy     = data.aws_iam_policy_document.ecs_task_execution.json
+}
+
+module "nginx_sg" {
+  source      = "./security_group"
+  name        = "nginx_sg"
+  vpc_id      = aws_vpc.favpic-vpc.id
+  port        = 80
+  cidr_blocks = [aws_vpc.favpic-vpc.cidr_block]
+}
