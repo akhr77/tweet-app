@@ -10,22 +10,45 @@ resource "aws_lb" "favpic-lb" {
     aws_subnet.public-subnet-1c.id
   ]
 
+
+
   security_groups = [
     module.http_sg.security_group_id,
-    module.https_sg.security_group_id
+    module.https_sg.security_group_id,
+    module.http_redirect_sg.security_group_id
   ]
 }
 
+resource "aws_lb_target_group" "favpic" {
+  name                 = "favpic"
+  target_type          = "ip"
+  vpc_id               = aws_vpc.favpic-vpc.id
+  port                 = 80
+  protocol             = "HTTP"
+  deregistration_delay = 300
+
+  health_check {
+    path                = "/"
+    healthy_threshold   = 5
+    unhealthy_threshold = 2
+    timeout             = 5
+    interval            = 30
+    matcher             = "200"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+  }
+  depends_on = [aws_lb.favpic-lb]
+}
+
+
 resource "aws_lb_listener" "favpic-https" {
   load_balancer_arn = aws_lb.favpic-lb.arn
-  port              = "443"
+  port              = 443
   protocol          = "HTTPS"
   certificate_arn   = aws_acm_certificate.favpic-certificate.arn
   ssl_policy        = "ELBSecurityPolicy-2016-08"
 
   default_action {
-    # target_group_arn = aws_lb_target_group.favpic-http.arn
-    # type             = "forward"
     type = "fixed-response"
     fixed_response {
       content_type = "text/plain"
@@ -37,7 +60,7 @@ resource "aws_lb_listener" "favpic-https" {
 
 resource "aws_lb_listener" "favpic-http" {
   load_balancer_arn = aws_lb.favpic-lb.arn
-  port              = "80"
+  port              = 80
   protocol          = "HTTP"
 
   default_action {
@@ -50,26 +73,35 @@ resource "aws_lb_listener" "favpic-http" {
   }
 }
 
+resource "aws_lb_listener" "redirect_http_to_https" {
+  load_balancer_arn = aws_lb.favpic-lb.arn
+  port              = 8085
+  protocol          = "HTTP"
 
+  default_action {
+    type = "redirect"
 
-resource "aws_lb_target_group" "favpic-http" {
-  name     = "favpic-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = aws_vpc.favpic-vpc.id
-
-  health_check {
-    enabled             = true
-    interval            = 30
-    path                = "/"
-    port                = 80
-    protocol            = "HTTP"
-    matcher             = "200"
-    timeout             = 5
-    healthy_threshold   = 5
-    unhealthy_threshold = 2
+    redirect {
+      port        = 443
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
-  depends_on = [aws_lb.favpic-lb]
+}
+
+resource "aws_lb_listener_rule" "favpic" {
+  listener_arn = aws_lb_listener.favpic-https.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.favpic.arn
+  }
+
+  condition {
+    field  = "path-pattern"
+    values = ["/*"]
+  }
 }
 
 output "alb_dns_name" {
