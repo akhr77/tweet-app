@@ -2,21 +2,54 @@ version: '3'
 services:
     vue:
         image: 633566444129.dkr.ecr.ap-northeast-1.amazonaws.com/favpic-vue:latest
-        container_name: vue
+        container_name: favpic-vue
         ports:
             - 8080:8080
         volumes:
-            - /home/ec2-user:/app
+            - .:/app
         working_dir: /app
         tty: true
         command: sh -c "cd assets && yarn install && yarn serve && npm run build"
 
     go:
         image: 633566444129.dkr.ecr.ap-northeast-1.amazonaws.com/favpic-go:latest
-        container_name: go
+        container_name: favpic-go
         volumes:
-            - /home/ec2-user:/go/src
+            - .:/go/src
         ports:
             - 8082:8082
         working_dir: /go/src/app
         tty: true
+        command: sh -c "go mod download && fresh"
+        depends_on:
+            - mysql
+
+    nginx:
+        image: nginx
+        depends_on:
+            - go
+        container_name: favpic-nginx
+        ports:
+            - 80:80
+        environment:
+            - TZ=Asia/Tokyo
+        volumes:
+            - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+
+    mysql:
+        image: mysql:8.0
+        container_name: favpicDB
+        volumes:
+          - db-store:/var/lib/mysql
+          - ./logs:/var/log/mysql
+          - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+        environment:
+          - MYSQL_DATABASE=${DB_NAME}
+          - MYSQL_USER=${DB_USER}
+          - MYSQL_PASSWORD=${DB_PASS}
+          - MYSQL_ROOT_PASSWORD=${DB_PASS}
+          - TZ=${TZ}
+        ports:
+          - ${DB_PORT}:3306
+volumes:
+    db-store:
