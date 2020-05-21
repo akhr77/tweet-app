@@ -44,5 +44,3 @@ module "describe_regions_for_ec2" {
 
 
 
-
-

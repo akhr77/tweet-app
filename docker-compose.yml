@@ -15,7 +15,6 @@ services:
     go:
         build:
             context: ./docker/go
-        # image: 633566444129.dkr.ecr.ap-northeast-1.amazonaws.com/favpic-go
         container_name: favpic-go
         volumes:
             - .:/go/src
@@ -23,7 +22,7 @@ services:
             - 8082:8082
         working_dir: /go/src/app
         tty: true
-        command: fresh
+        command: sh -c "go mod download && fresh"
         depends_on:
             - mysql
 
