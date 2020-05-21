@@ -54,6 +54,62 @@ resource "aws_ecr_lifecycle_policy" "favpic-go" {
 EOF
 }
 
+resource "aws_ecr_repository" "favpic-nginx" {
+  name = "favpic-nginx"
+}
+
+resource "aws_ecr_lifecycle_policy" "favpic-nginx" {
+  repository = aws_ecr_repository.favpic-nginx.name
+
+  policy = <<EOF
+  {
+    "rules": [
+      {
+        "rulePriority": 1,
+        "description": "Keep last 30 release tagged images",
+        "selection": {
+          "tagStatus": "tagged",
+          "tagPrefixList": ["release"],
+          "countType": "imageCountMoreThan",
+          "countNumber": 30
+        },
+        "action": {
+          "type": "expire"
+        }
+      }
+    ]
+  }
+EOF
+}
+
+resource "aws_ecr_repository" "favpic-db" {
+  name = "favpic-db"
+}
+
+resource "aws_ecr_lifecycle_policy" "favpic-db" {
+  repository = aws_ecr_repository.favpic-db.name
+
+  policy = <<EOF
+  {
+    "rules": [
+      {
+        "rulePriority": 1,
+        "description": "Keep last 30 release tagged images",
+        "selection": {
+          "tagStatus": "tagged",
+          "tagPrefixList": ["release"],
+          "countType": "imageCountMoreThan",
+          "countNumber": 30
+        },
+        "action": {
+          "type": "expire"
+        }
+      }
+    ]
+  }
+EOF
+}
+
 
 
 
