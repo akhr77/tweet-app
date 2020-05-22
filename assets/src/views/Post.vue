@@ -41,12 +41,10 @@ export default {
       params.append("fileName", this.fileName);
       params.append("fileType", this.fileType);
       params.append("image", this.imageData);
-      this.$axios
-        .post("http://localhost/api/upload/s3", params)
-        .then(response => {
-          console.log(response);
-          this.$router.push("list");
-        });
+      this.$axios.post("http://localhost/api/image", params).then(response => {
+        console.log(response);
+        this.$router.push("list");
+      });
     },
 
     uploadImg(e) {

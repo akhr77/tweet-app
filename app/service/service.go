@@ -35,36 +35,30 @@ func PostList(w http.ResponseWriter, r *http.Request) {
 // Upload action: Post /image
 // 写真を投稿
 func Upload(w http.ResponseWriter, r *http.Request) {
-	// // formデータの解析
-	// r.ParseForm()
-	// fileName := r.Form.Get("fileName")
-	// fileType := r.Form.Get("fileType")
-	// file := r.Form.Get("image")
+	// formデータの解析
+	r.ParseForm()
+	fileName := r.Form.Get("fileName")
+	fileType := r.Form.Get("fileType")
+	file := r.Form.Get("image")
 
-	// // S3への接続
-	// var (
-	// 	err   error
-	// 	awsS3 *utills.AwsS3
-	// 	// url   string
-	// )
-	// awsS3 = utills.NewAwsS3()
-	// _, err = awsS3.UploadImage(file, fileName, fileType)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	// S3への接続
+	var (
+		err   error
+		awsS3 *utills.AwsS3
+		// url   string
+	)
+	awsS3 = utills.NewAwsS3()
+	_, err = awsS3.UploadImage(file, fileName, fileType)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// jst, _ := time.LoadLocation("Asia/Tokyo")
-	// now := time.Now().In(jst)
-	// _, err = a.db.NamedExec(`INSERT INTO posts (user_id,image,comment,created_at,updated_at) VALUES (:userId,:image,:comment,:created,:updated)`, map[string]interface{}{
-	// 	"userId":  1,
-	// 	"image":   "images/develop/" + fileName,
-	// 	"comment": "アップロードできたー",
-	// 	"created": now,
-	// 	"updated": now,
-	// })
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	db := db.GetDB()
+	var p entity.Post
+	p.UserId = 1
+	p.Image = "images/develop/" + fileName
+	p.Comment = "GORMでのアップロード"
+	db.Create(&p)
 }
 
 type DownloadImage struct {
@@ -114,7 +108,6 @@ func UserbyID(w http.ResponseWriter, r *http.Request) {
 // Update action: PUT /user
 // user情報を更新
 func Update(w http.ResponseWriter, r *http.Request) {
-	log.Print("アップデート処理だぞー")
 	db := db.GetDB()
 	r.ParseForm()
 	log.Print(r)
