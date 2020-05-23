@@ -11,7 +11,5 @@ jobs:
     working_directory: /go/src/github.com/akhr77/favpic/app
     steps:
       - checkout
-
       # specify any bash command here prefixed with `run: `
-      - run: go mod download
-      - run: go test -v ./...
+      - run: go test -v -race ./...
